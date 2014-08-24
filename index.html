@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="../../nstyle.css">
+    <link rel="stylesheet" type="text/css" href="lesson.css">
+    <script type="text/javascript"         src="../efield/js/efield.min.js"></script>
+    <script type="text/javascript"         src="js/RadialDependencyAdaptor.js"></script>
+    <script type="text/javascript"         src="js/lessonContentEventHandler.js"></script>
+    <script type="text/javascript"         src="js/LessonContentEventSource.js"></script>
+    <script type="text/javascript"         src="js/lessonEventHandler.js"></script>
+    <script type="text/javascript"         src="js/gaussianSurfaceRChangedEventListiner.js"></script>
+    <script type="text/javascript"         src="js/ModelImageEventHandler.js"></script>
+    <script type="text/javascript"         src="js/XvsYController.js"></script>
+    <!-- <script type="text/javascript"         src="js/lesson.min.js"></script> -->
+    <link   href='http://fonts.googleapis.com/css?family=IM+Fell+French+Canon:400italic' rel='stylesheet' type='text/css'>
+    <script type="text/javascript"
+            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=MML_HTMLorMML">
+    </script>
+
+    <title>Gauss's Law: The Electric Field from a Point Charge</title>
+  </head>
+  <body>
+    <!-- Copyright 2013 VizIT Solutions -->
+    <div class="wrapper">
+      <div id="main">
+        <div id="header">
+          <span class="logo2 Fell drawOnResize"><a href = "http://www.vizitsolutions.com/">Vizit Solutions</a></span>
+          <ul>
+            <li class="drawOnResize"><a href="../catalog/" title="Catalog">Catalog</a></li>
+            <li class="drawOnResize"><a href="../" title="Portfolio">Portfolio</a></li>
+            <li class="drawOnResize"><a href="http://blog.vizitsolutions.com/" title="Blog">Blog</a></li>
+            <li class="drawOnResize"><a href="mailto:akluge@vizitsolutions.com?subject=Visualization" title="akluge@vizitsolutions.com">Contact</a></li>
+          </ul>
+        </div>
+      <div class="content">
+        <h2 class="center">Gauss's Law</h2>
+        <h3 class="center">The Electric Field from a Point Charge</h3>
+        <section>
+          <p>
+            There are two diagrams on this page. Both diagrams show the electric
+           field from a point charge at the origin.  The first diagram shows the
+           physical charge at the origin, along with the electric field lines
+           radiating out from the charge. The grey surface is neutral and will
+           be used to evaluate Gauss's law.
+          </p>
+          <p>
+            The second diagram shows the magnitude of the electric field vs
+           <math><mi>r</mi></math>, the distance from the charge.
+          </p>
+          <p>
+           Spin the field around and notice that while individual field lines move,
+           the field as a whole looks the same after any rotation in any direction.
+           This is an example of spherical symmetry. Another way to visualize
+           spherical symmetry is that the field lines are equally spaced, so the
+           field has the same strength at every point on the sphere.
+          </p>
+          <p>
+           We quickly see two important things from the figure. The field
+           lines are everywhere perpendicular to the neutral surface and they are
+           evenly distributed around the surface. This makes the expressions in
+           Gauss's law easier to evaluate. Surfaces where we evaluate Gauss's law
+           are usually called Gaussian surfaces. One of the main motivations for
+           selecting a specific Gaussian surface for a problem, is that it
+           simplifies the evaluation of Gauss's Law.
+          </p>
+        </section>
+        <section class="clearfix">
+          <figure class="left model">
+            <span>
+              <!--A blank area we can draw on with JavaScript. -->
+              <canvas id="drawingSurface" width="300" height="300"></canvas>
+
+              <!-- Help button, always drawn. -->
+              <label for="modelHelpCheck">
+                <div class="helpIcon helpHelpIcon">
+                  <div class="helpIcon2">
+                    <div class="helpIcon3">?</div>
+                  </div>
+                </div>
+              </label>
+
+              <!-- No WebGL warning, only drawn if WebGL unavailable. -->
+              <label for="noWebGLCheck">
+                <div id="noWebGLIcon" class="helpIcon infoHelpIcon">
+                  <div class="helpIcon2">
+                    <div class="infoIcon3">!</div>
+                  </div>
+                </div>
+              </label>
+            </span>
+            <figcaption>Fields lines radiate out from a point charge.</figcaption>
+          </figure>
+          <figure class="right controller">
+            <!-- We will lookup and populate the svg element in code. -->
+            <svg version="1.1" class="controller" id="EvsR"  viewBox="-40,0,1100,1090" preserveAspectRatio="xMinYMin meet" xmlns="http://www.w3.org/2000/svg">
+            </svg>
+            <figcaption>The <math><mfrac bevelled="true"><mn>1</mn><msup><mi>r</mi><mn class="exp">2</mn></msup></mfrac></math>
+                        field from the point charge.</figcaption>
+          </figure>
+        </section>
+
+        <!-- as per https://developer.mozilla.org/en-US/docs/Web/CSS/:checked -->
+        <input type="checkbox" class="helpCheck" id="modelHelpCheck" />
+        <section class="modelHelp">
+          <h4>A Positive Charge Surrounded By A Gaussian Sphere</h4>
+          <p>
+            The field lines radiate out from the charge and pass
+            through the sphere.
+          </p>
+          <details>
+            <summary>Mouse Interactions</summary>
+            <ul>
+              <li>Click and drag with the left mouse button to rotate the model.</li>
+              <li>Use the mouse wheel to zoom in and out.</li>
+            </ul>
+          </details>
+        <details>
+          <summary>Touch Interactions</summary>
+          <ul>
+            <li>Swipe with a finger to rotate the model.</li>
+            <li>Pinch with two fingers to zoom in and out.</li>
+          </ul>
+        </details>
+        </section>
+
+        <input type="checkbox" class="helpCheck" id="noWebGLCheck" />
+        <section class="noWebGL">
+          <h3>WebGL Unavailable</h3>
+          <p>
+            The full utility of these visualizations is only available
+           with WebGL. Please get a <a target = "_parent"
+           href = 'http://get.webgl.org/'>browser that supports
+           WebGL</a>.
+          </p>
+        </section>
+
+        <h2>Gauss's Law</h2>
+
+        <section class="explination">
+          <p>
+           Gauss's Law relates the electric flux through a closed surface to the
+           charge contained within that surface.
+          </p>
+          <math display     = 'block'>
+            <msub>
+              <mo>&Int;</mo>
+              <mi>S</mi>
+            </msub>
+            <mi mathvariant='bold'>E</mi>
+            <mo>&sdot;</mo>
+            <mi>d</mi><mi mathvariant='bold'>A</mi>
+            <mo>=</mo>
+            <mn>4</mn><mi>&pi;</mi><mi>q</mi>
+          </math>
+          <p>
+           We can evaluate this integral over the sphere centered on the charge.
+          </p>
+          <span class       = "derivation">
+            <math display     = 'block'
+                  indentalign = 'left'>
+              <msub>
+                <mo>&Int;</mo>
+                <mi>S</mi>
+              </msub>
+              <mi mathvariant='bold'>E</mi>
+              <mo>&sdot;</mo>
+              <mi>d</mi><mi mathvariant='bold'>A</mi>
+              <mo>=</mo>
+              <msub>
+                <mo>&Int;</mo>
+                <mi>S</mi>
+              </msub>
+              <mi>E</mi>
+              <mi>cos</mi>
+              <mo>&ApplyFunction;</mo>
+              <mfenced><mi>&#x3B8;</mi></mfenced>
+              <mi>d</mi><mi>A</mi>
+
+              <mspace linebreak='newline' />
+              <mi class="mathTextColor">E</mi><mspace width=".5em" /><mtext class="mathTextColor mathTextFont"> is perpendicular to the surface.</mtext>
+
+              <mo linebreak      = 'newline'
+                  linebreakstyle = 'before'
+                  indentshift    = '5.3em'>=</mo>
+              <msub>
+                <mo>&Int;</mo>
+                <mi>S</mi>
+              </msub>
+              <mi>E</mi>
+              <mi>d</mi><mi>A</mi>
+
+              <mspace linebreak='newline' />
+              <mi class="mathTextColor">E</mi><mspace width=".5em" /><mtext class="mathTextColor mathTextFont"> is constant over the surface.</mtext>
+
+              <mo linebreak      = 'newline'
+                  linebreakstyle = 'before'
+                  indentshift    = '5.3em'>=</mo>
+              <mi>E</mi>
+              <msub>
+                <mo>&Int;</mo>
+                <mrow><mi>S</mi></mrow>
+              </msub>
+              <mi>d</mi><mi>A</mi>
+
+              <mo linebreak      = 'newline'
+                  linebreakstyle = 'before'
+                  indentshift    = '5.3em'>=</mo>
+              <mi>E</mi>
+              <mi>A</mi>
+
+              <mo linebreak      = 'newline'
+                  linebreakstyle = 'before'
+                  indentshift    = '5.3em'>=</mo>
+              <mi>E</mi>
+              <mn>4</mn><mi>&pi;</mi><msup><mi>r</mi><mn class="exp">2</mn></msup>
+
+              <mspace linebreak='newline' />
+              <mtext class="mathTextColor mathTextFont">Then from Gauss's Law we know:</mtext>
+
+              <mo linebreak      = 'newline'
+                  linebreakstyle = 'before'
+                  indentshift    = '5.3em'>=</mo>
+              <mn>4</mn><mi>&pi;</mi><mi>q</mi>
+            </math>
+          </span>
+          <p>
+            So that for a point charge:
+          </p>
+
+          <math display     = 'block'>
+            <mi>E</mi><mo>=</mo><mfrac><mi>q</mi><msup><mi>r</mi><mn class="exp">2</mn></msup></mfrac>
+          </math>
+
+          <p>
+            Then for our configuration, a sphere of radius
+           <math><mi>r</mi><mo>=</mo><mn class="radius">15.00</mn><mtext>cm</mtext></math> centered around
+           a charge of
+           <math><mi>q</mi><mo>=</mo><mn class="charge">150</mn><mtext>statC</mtext></math>.
+          </p>
+
+          <span class       = "derivation">
+            <math display     = 'block'
+                  indentalign = 'left'>
+              <mi>E</mi><mo>=</mo><mfrac><mi>q</mi><msup><mi>r</mi><mn class="exp">2</mn></msup></mfrac>
+
+              <mo linebreak      = 'newline'
+                  linebreakstyle = 'before'
+                  indentshift    = '1.1em'>=</mo>
+              <mfrac><mrow><mn class="charge">150</mn><mtext>statC</mtext></mrow><msup><mfenced><mrow><mn class="radius">15.00</mn><mtext>cm</mtext></mrow></mfenced><mn>2</mn></msup></mfrac>
+
+              <mo linebreak      = 'newline'
+                  linebreakstyle = 'before'
+                  indentshift    = '1.1em'>=</mo>
+                  <mn class="qr2">0.66</mn><mfrac><mtext>statV</mtext><mtext>cm</mtext></mfrac>
+            </math>
+          </span>
+        </section>
+
+        <aside>
+          <p>
+            Gauss's law leads to an intuitive understanding of the
+            <math><mfrac bevelled="true"><mn>1</mn><msup><mi>r</mi><mn class="exp">2</mn></msup></mfrac></math>
+            nature of Coulomb's law. Flux is represented by the field lines passing through the Gaussian
+            surface in our diagram. The same number of field lines pass through the sphere no matter what the
+            radius. If the radius of the Gaussian surface doubles, say from
+            <abbr title="Set the Gaussian surface radius to 5 cm.">
+              <a href = "#" class="setter" id="r=5"><math><mi>r</mi><mo>=</mo><mn>5</mn></math></a>
+            </abbr>
+            to
+            <abbr title="Set the Gaussian surface radius to 10 cm.">
+              <a href = "#" class="setter" id="r=10"><math><mi>r</mi><mo>=</mo><mn>10</mn></math><a>
+            </abbr>
+            , the surface area, which increases as <math><msup><mi>r</mi><mn class="exp">2</mn></msup></math>,
+            quadruples. The electric field is spread out, and so decreases in strength, by exactly this factor.
+            We can see it by looking at the increase in space between the field lines where they cross these
+            two different Gaussian surfaces.
+          </p>
+        </aside>
+
+        <br class="clear">
+
+        <section>
+          <p>
+            Next up, we will apply Gauss's law to the slightly more complex case of a <a href = "lineCharge.html">line charge</a>.
+          </p>
+        </section>
+
+        <script type="text/javascript">
+          "use strict";
+          var charge;
+          var contentEventHandler;
+          var contentEventSource;
+          var drawingSurface;
+          var gaussianSurface;
+          var gaussianSurfaceListiner;
+          var listener;
+          var mappingEventHandler;
+          /** Used if WebGL not available to hold images of the model. */
+          var modelContainer;
+          var modelImage;
+          var modelImageEventHandler;
+          var renderer;
+          var resizeListener;
+          var svg;
+          var source;
+          var view;
+          var x, xLabel, xMin, xMax;
+          var y, yLabel, yMin, yMax;
+
+          /**
+           * Setup an image fallback for cases when WebGL is not available.
+           * @param element      {HTMLElement} The HTML element to which the image will be attached.
+           *                                   Expected to be a container such as figure, div, or span.
+           * @param defaultImage {string}      Path to the image displayed when the page is loaded.
+           * @param xName        {string}      Listen for xNameChanged events.
+           * @param              {Mixed} [...] Unlimited amount of optional parameters. A set of arguments
+           *                                   of the form x_n, image_n, x_n+1, image_n+1, x_n+2, where
+           *                                   imagen is used when xn <= x <xn+1.
+           */
+          function showModelImage(drawingSurface, defaultImage, xName)
+          {
+            var noWebGLInfo;
+
+            modelImage             = new Image();
+            modelImage.src         = defaultImage;
+            // Replace the 3D canvas with a 2D image, at least give them something.
+            drawingSurface.parentNode.replaceChild(modelImage, drawingSurface);
+            modelImageEventHandler = new ModelImageEventHandler(modelImage, xName, Array.prototype.slice.call(arguments, 3));
+
+            noWebGLInfo = document.getElementById("noWebGLIcon");
+            noWebGLInfo.style.display="block";
+          }
+
+          function makeCharge()
+          {
+            charge = new Charge(150.0, 0.0, 0.0, 0.0);
+            return charge;
+          }
+
+          function placeCharges(fieldRenderer)
+          {
+            charge = makeCharge();
+
+            fieldRenderer.addCharge(charge);
+
+            return fieldRenderer;
+          }
+
+          function placeStartPoints(fieldRenderer)
+          {
+            fieldRenderer.addStartPoint( 0.2,  0.0,  0.0,     1.0)
+                         .addStartPoint(-0.2,  0.0,  0.0,     1.0)
+                         .addStartPoint( 0.0,  0.2,  0.0,     1.0)
+                         .addStartPoint( 0.0, -0.2,  0.0,     1.0)
+                         .addStartPoint( 0.1,  0.1,  0.14142, 1.0)
+                         .addStartPoint( 0.1,  0.1, -0.14142, 1.0)
+                         .addStartPoint( 0.1, -0.1,  0.14142, 1.0)
+                         .addStartPoint( 0.1, -0.1, -0.14142, 1.0)
+                         .addStartPoint(-0.1,  0.1,  0.14142, 1.0)
+                         .addStartPoint(-0.1,  0.1, -0.14142, 1.0)
+                         .addStartPoint(-0.1, -0.1,  0.14142, 1.0)
+                         .addStartPoint(-0.1, -0.1, -0.14142, 1.0);
+
+            return fieldRenderer;
+          }
+          drawingSurface  = document.getElementById('drawingSurface');
+
+          if (!!window.HTMLCanvasElement)
+          {
+            drawingSurface  = document.getElementById('drawingSurface');
+            // efield's resources (images) are in this other directory
+            renderer        = new fieldRenderer(drawingSurface, "../efield/");
+            if (renderer.getContext())
+            {
+              renderer        = placeCharges(renderer);
+              renderer        = placeStartPoints(renderer);
+              gaussianSurface = new gaussianSphere(0.0, 0.0, 0.0, 15.0);
+              renderer        = renderer.addGaussianSurface(gaussianSurface);
+              renderer.zoomBy(-100.0);
+              renderer.start();
+
+              gaussianSurfaceListiner = new gaussianSurfaceRChangedEventListiner(gaussianSurface, renderer);
+              document.addEventListener("rChanged",   gaussianSurfaceListiner.handleRChanged.bind(gaussianSurfaceListiner),    false);
+
+              source   = new RadialDependancyAdaptor(renderer.getCharges(), 0.0, 0.0, 0.0, 0.0, 0.0);
+             }
+          }
+
+          if (!window.HTMLCanvasElement || !renderer.getContext())
+          {
+            charge         = makeCharge();
+            source         = new RadialDependancyAdaptor(charge);
+
+            modelContainer = document.getElementsByClassName("model")[0];
+            // No WebGL, so show default images.
+            showModelImage(drawingSurface, "charge_r=15.png", "r", "charge_r=5.png", 7.5, "charge_r=10.png", 12.5, "charge_r=15.png");
+          }
+
+          svg      = document.getElementById("EvsR");
+
+          xLabel   = "r";
+          xMin     = 0;
+          xMax     = 20;
+
+          yLabel   = "E";
+          yMin     = 0;
+          yMax     = 40;
+
+          view     = new XvsYView(source, xLabel, xMin, xMax, yLabel, yMin, yMax, svg);
+
+          contentEventHandler = new lessonContentEventHandler("rChanged", "radius");
+          mappingEventHandler = new MappingContentEventHandler("rChanged", (function (r){return 150/(r*r);}) ,"qr2");
+          contentEventSource  = new LessonContentIDEventSource("click", "setter");
+        </script>
+      </div>
+    </div>
+    <script type="text/javascript"         src="../../js/vizit.js"></script>
+  </body>
+</html>

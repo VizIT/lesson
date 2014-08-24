@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="../../nstyle.css">
+    <link rel="stylesheet" type="text/css" href="lesson.css">
+    <script type="text/javascript"         src="../efield/js/motionEventHandler.js"></script>
+    <script type="text/javascript"         src="../efield/js/WebGL.js"></script>
+    <script type="text/javascript"         src="../efield/js/geometry.js"></script>
+    <script type="text/javascript"         src="../efield/js/charges.js"></script>
+    <script type="text/javascript"         src="../efield/js/gaussianSphere.js"></script>
+    <script type="text/javascript"         src="../efield/js/cylinder.js"></script>
+    <script type="text/javascript"         src="../efield/js/chargedLine.js"></script>
+    <script type="text/javascript"         src="../efield/js/chargedCylinder.js"></script>
+    <script type="text/javascript"         src="../efield/js/gaussianCylinder.js"></script>
+    <script type="text/javascript"         src="../efield/js/chargedSphere.js"></script>
+    <script type="text/javascript"         src="../efield/js/chargedPlane.js"></script>
+    <script type="text/javascript"         src="../efield/js/efield.js"></script>
+    <!--<script type="text/javascript"         src="../efield/js/efield.min.js"></script> -->
+    <script type="text/javascript"         src="js/RadialDependencyAdaptor.js"></script>
+    <script type="text/javascript"         src="js/lessonContentEventHandler.js"></script>
+    <script type="text/javascript"         src="js/LessonContentEventSource.js"></script>
+    <script type="text/javascript"         src="js/lessonEventHandler.js"></script>
+    <script type="text/javascript"         src="js/gaussianSurfaceRChangedEventListiner.js"></script>
+    <script type="text/javascript"         src="js/ModelImageEventHandler.js"></script>
+    <script type="text/javascript"         src="js/XvsYController.js"></script>
+    <!-- <script type="text/javascript"         src="js/lesson.min.js"></script> -->
+    <link   href='http://fonts.googleapis.com/css?family=IM+Fell+French+Canon:400italic' rel='stylesheet' type='text/css'>
+    <script type="text/javascript"
+            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=MML_HTMLorMML">
+    </script>
+
+    <title>Gauss's Law: The Electric Field from an Infinite Line Charge</title>
+  </head>
+  <body>
+    <!-- Copyright 2013 VizIT Solutions -->
+    <div class="wrapper">
+      <div id="main">
+        <div id="header">
+          <span class="logo2 Fell drawOnResize"><a href = "http://www.vizitsolutions.com/">Vizit Solutions</a></span>
+          <ul>
+            <li class="drawOnResize"><a href="../catalog/" title="Catalog">Catalog</a></li>
+            <li class="drawOnResize"><a href="../" title="Portfolio">Portfolio</a></li>
+            <li class="drawOnResize"><a href="http://blog.vizitsolutions.com/" title="Blog">Blog</a></li>
+            <li class="drawOnResize"><a href="mailto:akluge@vizitsolutions.com?subject=Visualization" title="akluge@vizitsolutions.com">Contact</a></li>
+          </ul>
+        </div>
+      <div class="content">
+        <h2 class="center">Gauss's Law</h2>
+        <h3 class="center">The Electric Field from an Infinite Line Charge</h3>
+        <section>
+          <p>
+            When we worked with a <a href = "index.html">point charge</a> we recognised
+           spherical symmetry, which inspired us to select a spherical surface to simplify
+           Gauss's law.
+          </p>
+          <p>
+            Can we find a similar symmetry for an infinite line charge? If we do a little
+           bit of experimenting with the charge and field line diagram, we see that rotation
+           around the axis of the charged line does not change the shape of the field. This
+           leads to a Gaussian surface the curves around the line charge. Since Gauss's law
+           requires a closed surface, the ends of this surface must be closed. That is a
+           cylinder. This symmetry is commonly referred to as cylindrical symmetry.
+          </p>
+          <p>
+           The field lines are everywhere perpendicular to the wals of the cylinder,
+           and they are evenly distributed around the surface. Just like with the
+           sphere. The ends of the cylinder will be parallel to the elcetric field
+           so that
+           <math>
+             <mi mathvariant='bold'>E</mi><mo>&sdot;</mo><mi>d</mi><mi mathvariant='bold'>A</mi>
+             <mo>=</mo>
+             <mn>0</mn>
+           </math>
+           Once again, Gauss's Law will be easier to evaluate.
+          </p>
+        </section>
+        <section class="clearfix">
+          <figure class="left model">
+            <span>
+              <!--A blank area we can draw on with JavaScript. -->
+              <canvas id="drawingSurface" width="300" height="300"></canvas>
+
+              <!-- Help button, always drawn. -->
+              <label for="modelHelpCheck">
+                <div class="helpIcon helpHelpIcon">
+                  <div class="helpIcon2">
+                    <div class="helpIcon3">?</div>
+                  </div>
+                </div>
+              </label>
+
+              <!-- No WebGL warning, only drawn if WebGL unavailable. -->
+              <label for="noWebGLCheck">
+                <div id="noWebGLIcon" class="helpIcon infoHelpIcon">
+                  <div class="helpIcon2">
+                    <div class="infoIcon3">!</div>
+                  </div>
+                </div>
+              </label>
+            </span>
+            <figcaption>Fields lines radiate out from a charged line.</figcaption>
+          </figure>
+          <figure class="right controller">
+            <!-- We will lookup and populate the svg element in code. -->
+            <svg version="1.1" class="controller" id="EvsR"  viewBox="-40,0,1100,1090" preserveAspectRatio="xMinYMin meet" xmlns="http://www.w3.org/2000/svg">
+            </svg>
+            <figcaption>The <math><mfrac bevelled="true"><mn>1</mn><mi>r</mi></mfrac></math>
+                        field from the charged line.</figcaption>
+          </figure>
+        </section>
+
+        <!-- as per https://developer.mozilla.org/en-US/docs/Web/CSS/:checked -->
+        <input type="checkbox" class="helpCheck" id="modelHelpCheck" />
+        <section class="modelHelp">
+          <h4>An Infinite Line Charge Surrounded By A Gaussian Cylinder</h4>
+          <p>
+             Exploit the cylindrical symmetry of the charged line to select a
+            surface that simplifies Gausses Law.
+          </p>
+          <details>
+            <summary>Mouse Interactions</summary>
+            <ul>
+              <li>Click and drag with the left mouse button to rotate the model around the x and y-axes.</li>
+              <li>Shift-click with the left mouse button to rotate the model around the z-axis.</li>
+              <li>Use the mouse wheel to zoom in and out.</li>
+            </ul>
+          </details>
+        <details>
+          <summary>Touch Interactions</summary>
+          <ul>
+            <li>Swipe with a finger to rotate the model around the x and y-axes.</li>
+            <li>Rotate or twist with two fingers to rotate the model around the z-axis.</li>
+            <li>Pinch with two fingers to zoom in and out.</li>
+          </ul>
+        </details>
+        </section>
+
+        <input type="checkbox" class="helpCheck" id="noWebGLCheck" />
+        <section class="noWebGL">
+          <h3>WebGL Unavailable</h3>
+          <p>
+            The full utility of these visualizations is only available
+           with WebGL. Please get a <a target = "_parent"
+           href = 'http://get.webgl.org/'>browser that supports
+           WebGL</a>.
+          </p>
+        </section>
+
+        <h2>Gauss's Law</h2>
+
+        <section class="explination">
+          <p>
+           As always start with Gauss's Law.
+          </p>
+          <math display     = 'block'>
+            <msub>
+              <mo>&Int;</mo>
+              <mi>S</mi>
+            </msub>
+            <mi mathvariant='bold'>E</mi>
+            <mo>&sdot;</mo>
+            <mi>d</mi><mi mathvariant='bold'>A</mi>
+            <mo>=</mo>
+            <mn>4</mn><mi>&pi;</mi><mi>q</mi>
+          </math>
+          <p>
+           We break the surface integral into three parts, the left cap, the body, and the right cap of the cylinder.
+          </p>
+          <span class       = "derivation">
+            <math display     = 'block'
+                  indentalign = 'left'>
+              <msub>
+                <mo>&Int;</mo>
+                <mi>S</mi>
+              </msub>
+              <mi mathvariant='bold'>E</mi>
+              <mo>&sdot;</mo>
+              <mi>d</mi><mi mathvariant='bold'>A</mi>
+              <mo>=</mo>
+              <msub>
+                <mo>&Int;</mo>
+                <mi>L</mi>
+              </msub>
+              <mi mathvariant='bold'>E</mi>
+              <mo>&sdot;</mo>
+              <mi>d</mi><mi mathvariant='bold'>A</mi>
+              <mo>+</mo>
+              <msub>
+                <mo>&Int;</mo>
+                <mi>B</mi>
+              </msub>
+              <mi mathvariant='bold'>E</mi>
+              <mo>&sdot;</mo>
+              <mi>d</mi><mi mathvariant='bold'>A</mi>
+              <mo>+</mo>
+              <msub>
+                <mo>&Int;</mo>
+                <mi>R</mi>
+              </msub>
+              <mi mathvariant='bold'>E</mi>
+              <mo>&sdot;</mo>
+              <mi>d</mi><mi mathvariant='bold'>A</mi>
+            </math>
+          </span>
+          <p>
+           Let's work with the left end cap, <math><mi>L</mi></math>, first.
+          </p>
+          <span class       = "derivation">
+            <math display     = 'block'
+                  indentalign = 'left'>
+              <msub>
+                <mo>&Int;</mo>
+                <mi>L</mi>
+              </msub>
+              <mi mathvariant='bold'>E</mi>
+              <mo>&sdot;</mo>
+              <mi>d</mi><mi mathvariant='bold'>A</mi>
+              <mo>=</mo>
+              <msub>
+                <mo>&Int;</mo>
+                <mi>L</mi>
+              </msub>
+              <mi>E</mi>
+              <mi>cos</mi>
+              <mo>&ApplyFunction;</mo>
+              <mfenced><mi>&#x3B8;</mi></mfenced>
+              <mi>d</mi><mi>A</mi>
+
+              <mspace linebreak='newline' />
+              <mi class="mathTextColor">E</mi><mspace width=".5em" /><mtext class="mathTextColor mathTextFont"> is parallel to the cap.</mtext>
+
+              <mo linebreak      = 'newline'
+                  linebreakstyle = 'before'
+                  indentshift    = '5.3em'>=</mo>
+              <msub>
+                <mo>&Int;</mo>
+                <mi>L</mi>
+              </msub>
+              <mi>E</mi>
+              <mi>cos</mi>
+              <mo>&ApplyFunction;</mo>
+              <mfenced><mfrac><mi>&pi;</mi><mn>2</mn></mfrac></mfenced>
+              <mi>d</mi><mi>A</mi>
+              <mo linebreak      = 'newline'
+                  linebreakstyle = 'before'
+                  indentshift    = '5.3em'>=</mo>
+              <mn>0</mn>
+            </math>
+          </span>
+          <p>
+           This makes a great deal of sense. When the field is parallel to the surface
+           the flux through the surface is zero. The process is identical for the right
+           cap, so all the contributions to the flux come from the body of the cylinder.
+          </p>
+          <span class       = "derivation">
+            <math display     = 'block'
+                  indentalign = 'left'>
+              <msub>
+                <mo>&Int;</mo>
+                <mi>B</mi>
+              </msub>
+              <mi mathvariant='bold'>E</mi>
+              <mo>&sdot;</mo>
+              <mi>d</mi><mi mathvariant='bold'>A</mi>
+              <mo>=</mo>
+              <msub>
+                <mo>&Int;</mo>
+                <mi>B</mi>
+              </msub>
+              <mi>E</mi>
+              <mi>cos</mi>
+              <mo>&ApplyFunction;</mo>
+              <mfenced><mi>&#x3B8;</mi></mfenced>
+              <mi>d</mi><mi>A</mi>
+
+              <mspace linebreak='newline' />
+              <mi class="mathTextColor">E</mi><mspace width=".5em" /><mtext class="mathTextColor mathTextFont"> is perpendicular to the body.</mtext>
+
+              <mo linebreak      = 'newline'
+                  linebreakstyle = 'before'
+                  indentshift    = '5.3em'>=</mo>
+              <msub>
+                <mo>&Int;</mo>
+                <mi>B</mi>
+              </msub>
+              <mi>E</mi>
+              <mi>d</mi><mi>A</mi>
+
+              <mspace linebreak='newline' />
+              <mi class="mathTextColor">E</mi><mspace width=".5em" /><mtext class="mathTextColor mathTextFont"> is constant over the surface.</mtext>
+
+              <mo linebreak      = 'newline'
+                  linebreakstyle = 'before'
+                  indentshift    = '5.3em'>=</mo>
+              <mi>E</mi>
+              <msub>
+                <mo>&Int;</mo>
+                <mi>B</mi>
+              </msub>
+              <mi>d</mi><mi>A</mi>
+
+              <mo linebreak      = 'newline'
+                  linebreakstyle = 'before'
+                  indentshift    = '5.3em'>=</mo>
+              <mi>E</mi>
+              <mi>A</mi>
+
+              <mspace linebreak='newline' />
+              <mtext class="mathTextColor mathTextFont">If&nbsp;</mtext> <mi>L</mi><mtext class="mathTextColor mathTextFont">&nbsp;is the length of the cylinder.</mtext>
+
+              <mo linebreak      = 'newline'
+                  linebreakstyle = 'before'
+                  indentshift    = '5.3em'>=</mo>
+              <mi>E</mi>
+              <mn>2</mn><mi>&pi;</mi><mi>r</mi><mi>L</mi>
+
+              <mspace linebreak='newline' />
+              <mtext class="mathTextColor mathTextFont">Then from Gauss's Law we know:</mtext>
+
+              <mo linebreak      = 'newline'
+                  linebreakstyle = 'before'
+                  indentshift    = '5.3em'>=</mo>
+              <mn>4</mn><mi>&pi;</mi><mi>q</mi>
+
+              <mspace linebreak='newline' />
+              <mtext class="mathTextColor mathTextFont">If&nbsp;</mtext> <mi>&lambda;</mi><mtext class="mathTextColor mathTextFont">&nbsp;is the charge density of the line,</mtext>
+
+              <mo linebreak      = 'newline'
+                  linebreakstyle = 'before'
+                  indentshift    = '5.3em'>=</mo>
+              <mn>4</mn><mi>&pi;</mi><mi>&lambda;</mi><mi>L</mi>
+            </math>
+          </span>
+          <p>
+            So that for a line charge:
+          </p>
+
+          <math display     = 'block'>
+            <mi>E</mi><mo>=</mo><mfrac><mrow><mn>2</mn><mi>&lambda;</mi></mrow><mi>r</mi></mfrac>
+          </math>
+
+          <p>
+            Then for our configuration, a cylinder with radius
+           <math><mi>r</mi><mo>=</mo><mn class="radius">15.00</mn><mtext>cm</mtext></math>
+           centered around a line with charge density
+           <math><mi>&lambda;</mi><mo>=</mo><mn class="charge">8</mn><mfrac bevelled="true"><mtext>statC</mtext><mtext>cm</mtext></math>.
+          </p>
+
+          <span class       = "derivation">
+            <math display     = 'block'
+                  indentalign = 'left'>
+              <mi>E</mi><mo>=</mo><mfrac><mrow><mn>2</mn><mi>&lambda;</mi></mrow><mi>r</mi></mfrac>
+
+              <mo linebreak      = 'newline'
+                  linebreakstyle = 'before'
+                  indentshift    = '1.1em'>=</mo>
+              <mfrac><mrow><mn class="charge">2</mn><mfenced separators=""><mn class="charge">8</mn><mfrac bevelled="true"><mtext>statC</mtext><mtext>cm</mtext></mfenced></mrow>
+                     <mrow><mn class="radius">15.00</mn><mtext>cm</mtext></msup></mfrac>
+
+              <mo linebreak      = 'newline'
+                  linebreakstyle = 'before'
+                  indentshift    = '1.1em'>=</mo>
+                  <mn class="EofR">1.07</mn><mfrac><mtext>statV</mtext><mtext>cm</mtext></mfrac>
+            </math>
+          </span>
+        </section>
+
+        <aside>
+          <p>
+            For a line charge, we use a cylindrical Gaussian surface. The surface area of the
+            cylinder increases with <math><mi>r</mi></math>, so the field strength
+            decreases with <math><mfrac bevelled="true"><mn>1</mn><mi>r</mi></mfrac></math>
+            as the field is spread over the surface.
+            If the radius of the Gaussian surface doubles, say from
+            <abbr title="Set the Gaussian surface radius to 5 cm.">
+              <a href = "#" class="setter" id="r=5"><math><mi>r</mi><mo>=</mo><mn>5</mn></math></a>
+            </abbr>
+            to
+            <abbr title="Set the Gaussian surface radius to 10 cm.">
+              <a href = "#" class="setter" id="r=10"><math><mi>r</mi><mo>=</mo><mn>10</mn></math><a>
+            </abbr>
+            , the surface area, which increases as <math><mi>r</mi></math>, also doubles. The electric field
+            decreases in strength by exactly this factor.  We can see it by looking at the increase in
+            space between the field lines where they cross these two different Gaussian surfaces.
+          </p>
+        </aside>
+
+        <script type="text/javascript">
+          "use strict";
+          var charge;
+          var contentEventHandler;
+          var contentEventSource;
+          var drawingSurface;
+          var gaussianSurface;
+          var gaussianSurfaceListiner;
+          var listener;
+          var mappingEventHandler;
+          /** Used if WebGL not available to hold images of the model. */
+          var modelContainer;
+          var modelImage;
+          var modelImageEventHandler;
+          var renderer;
+          var resizeListener;
+          var svg;
+          var source;
+          var view;
+          var x, xLabel, xMin, xMax;
+          var y, yLabel, yMin, yMax;
+
+          /**
+           * Setup an image fallback for cases when WebGL is not available.
+           * @param element      {HTMLElement} The HTML element to which the image will be attached.
+           *                                   Expected to be a container such as figure, div, or span.
+           * @param defaultImage {string}      Path to the image displayed when the page is loaded.
+           * @param xName        {string}      Listen for xNameChanged events.
+           * @param              {Mixed} [...] Unlimited amount of optional parameters. A set of arguments
+           *                                   of the form x_n, image_n, x_n+1, image_n+1, x_n+2, where
+           *                                   imagen is used when xn <= x <xn+1.
+           */
+          function showModelImage(drawingSurface, defaultImage, xName)
+          {
+            var noWebGLInfo;
+
+            modelImage             = new Image();
+            modelImage.src         = defaultImage;
+            // Replace the 3D canvas with a 2D image, at least give them something.
+            drawingSurface.parentNode.replaceChild(modelImage, drawingSurface);
+            modelImageEventHandler = new ModelImageEventHandler(modelImage, xName, Array.prototype.slice.call(arguments, 3));
+
+            noWebGLInfo = document.getElementById("noWebGLIcon");
+            noWebGLInfo.style.display="block";
+          }
+
+          function makeCharge()
+          {
+            charge = new chargedLine(-30, -10, 30, 30, 10, -30, 8, .005);
+            return charge;
+          }
+
+          function placeCharges(fieldRenderer)
+          {
+            charge = makeCharge();
+
+            fieldRenderer.addChargeDistribution(charge);
+
+            return fieldRenderer;
+          }
+
+          function placeGaussianSurface(fieldRenderer)
+          {
+            // Copied angles from running javascript for the charged line.
+            gaussianSurface    = new gaussianCylinder(0.0, 0.0, 0.0, 40, 15, 0.3217505543966422, 2.32986653606156);
+
+            fieldRenderer.addGaussianSurface(gaussianSurface);
+
+            return fieldRenderer;
+          }
+
+          drawingSurface  = document.getElementById('drawingSurface');
+
+          if (!!window.HTMLCanvasElement)
+          {
+            // efield's resources (images) are in this other directory
+            renderer        = new fieldRenderer(drawingSurface, "../efield/");
+            if (renderer.getContext())
+            {
+              renderer        = placeCharges(renderer);
+              renderer        = placeGaussianSurface(renderer);
+              //renderer.zoomBy(-100.0);
+              renderer.start();
+
+              gaussianSurfaceListiner = new gaussianSurfaceRChangedEventListiner(gaussianSurface, renderer);
+              document.addEventListener("rChanged",   gaussianSurfaceListiner.handleRChanged.bind(gaussianSurfaceListiner),    false);
+              // theta, phi are + Pi/2 from the charged line to give a radial line perpendicular to the charged line.
+              source   = new RadialDependancyAdaptor(renderer.getCharges(), 0.0, 0.0, 0.0, 0.3217505543966422 + Math.PI/2, 2.32986653606156 + Math.PI/2);
+             }
+          }
+
+          if (!window.HTMLCanvasElement || !renderer.getContext())
+          {
+            charge         = makeCharge();
+            source         = new RadialDependancyAdaptor(charge, 0.0, 0.0, 0.0, 0.3217505543966422 + Math.PI/2, 2.32986653606156 + Math.PI/2);
+
+            modelContainer = document.getElementsByClassName("model")[0];
+            // No WebGL, so show default images.
+            showModelImage(drawingSurface, "lineCharge_r=15.png", "r", "lineCharge_r=5.png", 7.5, "lineCharge_r=10.png", 12.5, "lineCharge_r=15.png");
+          }
+
+          svg      = document.getElementById("EvsR");
+
+          xLabel   = "r";
+          xMin     = 0;
+          xMax     = 20.0;
+
+          yLabel   = "E";
+          yMin     = 0;
+          yMax     = 40.0;
+
+          view     = new XvsYView(source, xLabel, xMin, xMax, yLabel, yMin, yMax, svg);
+
+          contentEventHandler = new lessonContentEventHandler("rChanged", "radius");
+          mappingEventHandler = new MappingContentEventHandler("rChanged", (function (r){return 16.0/r;}) ,"EofR");
+          contentEventSource  = new LessonContentIDEventSource("click", "setter");
+        </script>
+      </div>
+    </div>
+    <script type="text/javascript"         src="../../js/vizit.js"></script>
+  </body>
+</html>
