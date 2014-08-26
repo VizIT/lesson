@@ -17,22 +17,17 @@
  */
 
 /**
- * Generic event handler to accept a user defined mapping,
- * via a text configuration such as JSON.
+ * Invoke update method without any mapping of the event value.
  *
- * @param {Function} updater  The function invoked to update the system
- * @param {string}   variable The name of the external variable that triggers the update.
- * @param {string}   mapping  An expression that transforms the variable into the value
- *                            set by the updater.
+ * @param {Function} updater A Function that updates the desired value on an
+ *                           element of the visualization.
  *
  * @class
  */
-function MappingEventHandler(updater_, variable, mapping_, framework_)
+function DirectEventHandler(updater_, framework_)
 {
-  var framework;
-  var mapping;
-  /** function that updates the desired value when an event is recieved. */
   var updater;
+  var framework;
 
   this.handleUpdate = function(event)
   {
@@ -40,11 +35,10 @@ function MappingEventHandler(updater_, variable, mapping_, framework_)
 
     detail = event.detail;
 
-    updater(mapping(detail.value));
+    updater(detail.value);
     framework.requestRender();
   }
 
-  mapping   = new Function(variable, "return " + mapping_ + ";");
-  framework = framework_l
   updater   = updater_;
+  framework = framework_;
 }
