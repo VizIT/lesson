@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- *  @license Copyright 2014 Vizit Solutions
+ *  Copyright 2014 Vizit Solutions
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,29 +16,35 @@
  *  limitations under the License.
  */
 
-/**
- * Invoke update method without any mapping of the event value.
- *
- * @param {Function} updater A Function that updates the desired value on an
- *                           element of the visualization.
- *
- * @class
- */
-function DirectEventHandler(updater_, framework_)
-{
-  var updater;
-  var framework;
+window.vizit        = window.vizit        || {};
+window.vizit.lesson = window.vizit.lesson || {};
 
-  this.handleUpdate = function(event)
-  {
-    var detail;
+(function (ns)
+ {
+   /**
+    * Invoke update method without any mapping of the event value.
+    *
+    * @param {Function} updater A Function that updates the desired value on an
+    *                           element of the visualization.
+    *
+    * @class
+    */
+   ns.DirectEventHandler = function(updater_, framework_)
+   {
+     var updater;
+     var framework;
 
-    detail = event.detail;
+     this.handleUpdate = function(event)
+     {
+       var detail;
 
-    updater(detail.value);
-    framework.requestRender();
-  }
+       detail = event.detail;
 
-  updater   = updater_;
-  framework = framework_;
-}
+       updater(detail.value);
+       framework.requestRender();
+     }
+
+     updater   = updater_;
+     framework = framework_;
+   }
+ }(window.vizit.lesson));

@@ -22,35 +22,40 @@ window.vizit.lesson = window.vizit.lesson || {};
 (function (ns)
  {
    /**
-    * Generic event handler to accept a user defined mapping,
-    * via a text configuration such as JSON.
+    * Handle r changed events from control components, such as XvsYView.
     *
-    * @param {Function} updater  The function invoked to update the system
-    * @param {string}   variable The name of the external variable that triggers the update.
-    * @param {string}   mapping  An expression that transforms the variable into the value
-    *                            set by the updater.
+    * TODO Redplace with DirectEventHandlers
+    *
+    * @param target_   A gaussian surface that has a setRadius method.
+    * @param renderer_ An instance of a framework containing the gausian surface.
     *
     * @class
     */
-   ns.MappingEventHandler = function(updater_, variable, mapping_, framework_)
+   ns.GaussianSurfaceRChangedEventListiner = function(target_, renderer_)
    {
-     var framework;
-     var mapping;
-     /** function that updates the desired value when an event is recieved. */
-     var updater;
+     var renderer;
+     var target;
+     var targetID;
 
-     this.handleUpdate = function(event)
+     renderer      = renderer_;
+     target        = target_;
+
+     this.handleRChanged   = function(event)
      {
        var detail;
 
        detail = event.detail;
-
-       updater(mapping(detail.value));
-       framework.requestRender();
+       target.setRadius(detail.value);
+       renderer.render();
      }
 
-     mapping   = new Function(variable, "return " + mapping_ + ";");
-     framework = framework_l
-     updater   = updater_;
+     this.handleHChanged   = function(event)
+     {
+       var detail;
+
+       detail = event.detail;
+       target.setHeight(detail.value);
+       renderer.render();
+     }
    }
  }(window.vizit.lesson));

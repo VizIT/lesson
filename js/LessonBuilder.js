@@ -31,7 +31,7 @@ window.vizit.lesson = window.vizit.lesson || {};
      /**
       * Query the DOM to find relevant elements, and attach the desired behavior.
       */
-     this.findElements   = function()
+     this.init   = function()
      {
        var element;
        var elements;
@@ -60,7 +60,7 @@ window.vizit.lesson = window.vizit.lesson || {};
      {
        if (document.readyState === "interactive" || document.readyState === "complete")
        {
-         this.findElements();
+         this.init();
        }
        else
        {

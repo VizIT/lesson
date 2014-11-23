@@ -1,345 +1,368 @@
+"use strict";
+
 /**
- * Render a graph of y = source.f(x) with x ranging from xMin to xMax
- * and y clipped to the range yMin < y < yMax.
+ *  Copyright 2014 Vizit Solutions
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
-function XvsYView(source_, xLabel_, xMin_, xMax_, yLabel_, yMin_, yMax_, svg_)
-{
-  var axesGroup;
-  var axisLabel;
-  var CUSTOM_EVENT;
-  var clipPath;
-  var clipRect;
-  var defs;
-  /** Spacing between function evaluations, smaller values => smoother curve, but slower */
-  var deltaX;
-  var eventHandler;
-  var group;
-  var markerGroup;
-  var markerPath;
-  var markerText;
-  var plot;
-  var pointer;
-  var points;
-  var ptr;
-  var ptrGroup;
-  var source;
-  var svg;
-  var svgNS;
-  var xlinkNS;
-  var x, xAxis, xLabel, xMin, xMax, xMidLabel, xMaxLabel, xOffset, xScale;
-  var y, yAxis, yLabel, yMin, yMax, yMidLabel, yMaxLabel, yOffset, yScale;
+window.vizit        = window.vizit        || {};
+window.vizit.lesson = window.vizit.lesson || {};
 
-  CUSTOM_EVENT = "CustomEvent";
-  deltaX       = 0.1;
-  source       = source_;
-  svg          = svg_;
-  svgNS        = "http://www.w3.org/2000/svg";
-  xlinkNS      = "http://www.w3.org/1999/xlink";
-  xLabel       = xLabel_;
-  xMin         = xMin_;
-  xMax         = xMax_;
-  xOffset      = 50;
-  xScale       = 1000/(xMax-xMin);
-  yLabel       = yLabel_;
-  yMin         = yMin_;
-  yMax         = yMax_;
-  yOffset      = 20;
-  yScale       = 1000/(yMax-yMin);
+(function (ns)
+ {
+   /**
+    * Render a graph of y = source.f(x) with x ranging from xMin to xMax
+    * and y clipped to the range yMin < y < yMax.
+    */
+   ns.XvsYView = function(source_, xLabel_, xMin_, xMax_, yLabel_, yMin_, yMax_, svg_)
+   {
+     var axesGroup;
+     var axisLabel;
+     var CUSTOM_EVENT;
+     var clipPath;
+     var clipRect;
+     var defs;
+     /** Spacing between function evaluations, smaller values => smoother curve, but slower */
+     var deltaX;
+     var eventHandler;
+     var group;
+     var markerGroup;
+     var markerPath;
+     var markerText;
+     var plot;
+     var pointer;
+     var points;
+     var ptr;
+     var ptrGroup;
+     var source;
+     var svg;
+     var svgNS;
+     var xlinkNS;
+     var x, xAxis, xLabel, xMin, xMax, xMidLabel, xMaxLabel, xOffset, xScale;
+     var y, yAxis, yLabel, yMin, yMax, yMidLabel, yMaxLabel, yOffset, yScale;
 
-  this.getID          = function() 
-  {
-    return svg.id;
-  }
+     CUSTOM_EVENT = "CustomEvent";
+     deltaX       = 0.1;
+     source       = source_;
+     svg          = svg_;
+     svgNS        = "http://www.w3.org/2000/svg";
+     xlinkNS      = "http://www.w3.org/1999/xlink";
+     xLabel       = xLabel_;
+     xMin         = xMin_;
+     xMax         = xMax_;
+     xOffset      = 50;
+     xScale       = 1000/(xMax-xMin);
+     yLabel       = yLabel_;
+     yMin         = yMin_;
+     yMax         = yMax_;
+     yOffset      = 20;
+     yScale       = 1000/(yMax-yMin);
 
-  this.mapXToScreen   = function(x)
-  {
-      return (x-xMin)*xScale;
-  }
+     this.getID          = function() 
+     {
+       return svg.id;
+     }
 
-  this.mapScreenToX   = function(x)
-  {
-    return x/xScale + xMin;
-  }
+     this.mapXToScreen   = function(x)
+     {
+	 return (x-xMin)*xScale;
+     }
 
-  /**
-   * Map event offsetX svg coordinates to the plot coordinates.
-   */
-  this.mapRawToGroupX = function(x)
-  {
-    x -= 50;
-    return x;
-  }
+     this.mapScreenToX   = function(x)
+     {
+       return x/xScale + xMin;
+     }
 
-  this.mapYToScreen   = function(y)
-  {
-    // This should put negative and positive infinity where they are clipped.
-    // SVG has a habbit of clipping the entire curve if it extends to infinity.
-    if (y > yMax)
-    {
-      y = yMax + 10;
-    }
-    else if (y < yMin)
-    {
-      y = yMin - 10;
-    }
-    // SVG coordinates have y=0 at the top, increasing downwards.
-    return 1000 - (y-yMin)*yScale;
-  }
+     /**
+      * Map event offsetX svg coordinates to the plot coordinates.
+      */
+     this.mapRawToGroupX = function(x)
+     {
+       x -= 50;
+       return x;
+     }
 
-  this.createPointer     = function(x, y)
-  {
-    <!-- The ‘use’ element references another element and indicates -->
-    <!-- that the graphical contents of that element is included/drawn -->
-    <!-- at that given point in the document. -->
-    var pointer = document.createElementNS(svgNS,            "use");
-    <!-- The object in the defs section to instianted by this -->
-    <!-- 'use' element -->
-    pointer.setAttributeNS(xlinkNS, "href",             "#pointer");
-    pointer.setAttributeNS(null,    "x",                        x);
-    pointer.setAttributeNS(null,    "y",                        y);
-    return pointer;
-  }
+     this.mapYToScreen   = function(y)
+     {
+       // This should put negative and positive infinity where they are clipped.
+       // SVG has a habbit of clipping the entire curve if it extends to infinity.
+       if (y > yMax)
+       {
+	 y = yMax + 10;
+       }
+       else if (y < yMin)
+       {
+	 y = yMin - 10;
+       }
+       // SVG coordinates have y=0 at the top, increasing downwards.
+       return 1000 - (y-yMin)*yScale;
+     }
 
-  this.dispatchXChangedEvent = function()
-  {
-    var defaultCanceled;
-    var event;
+     this.createPointer     = function(x, y)
+     {
+       <!-- The ‘use’ element references another element and indicates -->
+       <!-- that the graphical contents of that element is included/drawn -->
+       <!-- at that given point in the document. -->
+       var pointer = document.createElementNS(svgNS,            "use");
+       <!-- The object in the defs section to instianted by this -->
+       <!-- 'use' element -->
+       pointer.setAttributeNS(xlinkNS, "href",             "#pointer");
+       pointer.setAttributeNS(null,    "x",                        x);
+       pointer.setAttributeNS(null,    "y",                        y);
+       return pointer;
+     }
 
-    event = document.createEvent(CUSTOM_EVENT);
-    event.initCustomEvent(xLabel + "Changed", true, true, {"value": x, "source": svg.id});
-    // Default returned, true if any handler invoked prevent default - do we care?
-    svg.dispatchEvent(event);
-  }
+     this.dispatchXChangedEvent = function()
+     {
+       var defaultCanceled;
+       var event;
 
-  /**
-   * Invoked in response to an externally sourced event, do not generate another event.
-   */
-  this.setX                  = function(x)
-  {
-    this.x = x;
-    if (x>=xMin && x<=xMax)
-    {
-      y = source.f(x);
+       event = document.createEvent(CUSTOM_EVENT);
+       event.initCustomEvent(xLabel + "Changed", true, true, {"value": x, "source": svg.id});
+       // Default returned, true if any handler invoked prevent default - do we care?
+       svg.dispatchEvent(event);
+     }
 
-      pointer.x.baseVal.value = this.mapXToScreen(x);
-      pointer.y.baseVal.value = this.mapYToScreen(y);
-    }
-  }
+     /**
+      * Invoked in response to an externally sourced event, do not generate another event.
+      */
+     this.setX                  = function(x)
+     {
+       this.x = x;
+       if (x>=xMin && x<=xMax)
+       {
+	 y = source.f(x);
 
-  /**
-   * Invoked in our click processing, so we want to generate an event for others.
-   */
-  this.setScreenX            = function(x_)
-  {
-    x_ = this.mapRawToGroupX(x_);
-    x  = this.mapScreenToX(x_);
+	 pointer.x.baseVal.value = this.mapXToScreen(x);
+	 pointer.y.baseVal.value = this.mapYToScreen(y);
+       }
+     }
 
-    if (x>xMin && x<xMax)
-    {
-      y = source.f(x);
-      y = this.mapYToScreen(y);
+     /**
+      * Invoked in our click processing, so we want to generate an event for others.
+      */
+     this.setScreenX            = function(x_)
+     {
+       x_ = this.mapRawToGroupX(x_);
+       x  = this.mapScreenToX(x_);
 
-      pointer.x.baseVal.value = x_;
-      pointer.y.baseVal.value = y;
+       if (x>xMin && x<xMax)
+       {
+	 y = source.f(x);
+	 y = this.mapYToScreen(y);
 
-      this.dispatchXChangedEvent();
-    }
-  }
+	 pointer.x.baseVal.value = x_;
+	 pointer.y.baseVal.value = y;
 
-  this.computePoints         = function()
-  {
-    var x, y;
-    points     = "";
-    for(x=xMin; x<xMax; x+=deltaX)
-    {
-      y       = source.f(x);
-      points += this.mapXToScreen(x);
-      points += ","
-      points += this.mapYToScreen(y);
-      points += " ";
-    }
+	 this.dispatchXChangedEvent();
+       }
+     }
 
-    // Trim off trailing space.
-    points = points.substring(0, points.length-1);
+     this.computePoints         = function()
+     {
+       var x, y;
+       points     = "";
+       for(x=xMin; x<xMax; x+=deltaX)
+       {
+	 y       = source.f(x);
+	 points += this.mapXToScreen(x);
+	 points += ","
+	 points += this.mapYToScreen(y);
+	 points += " ";
+       }
 
-    return points;
-  }
+       // Trim off trailing space.
+       points = points.substring(0, points.length-1);
 
-  /**
-   *
-   */
-  this.zoomBy                = function(factor)
-  {
-    var tmp;
+       return points;
+     }
 
-    xMin   *= factor;
-    xMax   *= factor;
-    yMin   *= factor;
-    yMax   *= factor;
+     /**
+      *
+      */
+     this.zoomBy                = function(factor)
+     {
+       var tmp;
 
-    xMaxLabel.textContent = xMax.toFixed(2);
-    tmp                   = (xMin+xMax)/2;
-    xMidLabel.textContent = tmp.toFixed(2);
+       xMin   *= factor;
+       xMax   *= factor;
+       yMin   *= factor;
+       yMax   *= factor;
 
-    yMaxLabel.textContent = yMax.toFixed(2);
-    tmp                   = (yMin+yMax)/2;
-    yMidLabel.textContent = tmp.toFixed(2);
+       xMaxLabel.textContent = xMax.toFixed(2);
+       tmp                   = (xMin+xMax)/2;
+       xMidLabel.textContent = tmp.toFixed(2);
 
-    xScale  = 1000/(xMax-xMin);
-    yScale  = 1000/(yMax-yMin);
+       yMaxLabel.textContent = yMax.toFixed(2);
+       tmp                   = (yMin+yMax)/2;
+       yMidLabel.textContent = tmp.toFixed(2);
 
-    deltaX *= factor;
+       xScale  = 1000/(xMax-xMin);
+       yScale  = 1000/(yMax-yMin);
 
-    points       = this.computePoints();
-    plot.setAttributeNS(null, "points", points);
-    
-    x       = Math.min(xMax, Math.max(xMin, x));
+       deltaX *= factor;
 
-    // Update the pointer.
-    this.setX(x);
-    this.dispatchXChangedEvent();
-  }
+       points       = this.computePoints();
+       plot.setAttributeNS(null, "points", points);
 
-  // Translate the graph so the origin, where the axes cross, is at 0,0.
-  group      = document.createElementNS(svgNS,                        "g");
-  group.setAttributeNS(null, "transform",   "translate(" + xOffset + "," + yOffset + ")"); 
+       x       = Math.min(xMax, Math.max(xMin, x));
 
-  defs       = document.createElementNS(svgNS,                     "defs");
-  clipPath   = document.createElementNS(svgNS,                 "clipPath");
-  clipPath.setAttributeNS(null,   "id",                        "plotClip");
-  clipRect   = document.createElementNS(svgNS,                     "rect");
-  clipRect.setAttributeNS(null,    "x",                                 0);
-  clipRect.setAttributeNS(null,    "y",                                 0);
-  clipRect.setAttributeNS(null,    "height",                         1000);
-  clipRect.setAttributeNS(null,    "width",                          1000);
-  clipPath.appendChild(clipRect);
-  defs.appendChild(clipPath);
+       // Update the pointer.
+       this.setX(x);
+       this.dispatchXChangedEvent();
+     }
 
-  ptrGroup   = document.createElementNS(svgNS,                         "g");
-  // This will be the marker for the current value of r.
-  ptrGroup.setAttributeNS(null,    "id",                         "pointer");
-  ptr        = document.createElementNS(svgNS,                    "circle");
-  ptr.setAttributeNS(null,    "cx",                                      0);
-  ptr.setAttributeNS(null,    "cy",                                      0);
-  ptr.setAttributeNS(null,    "r",                                      12);
-  ptr.setAttributeNS(null,    "class",                          "rPointer");
-  ptrGroup.appendChild(ptr);
-  ptr        = document.createElementNS(svgNS,                    "circle");
-  ptr.setAttributeNS(null,    "cx",                                      0);
-  ptr.setAttributeNS(null,    "cy",                                      0);
-  ptr.setAttributeNS(null,    "r",                                       5);
-  ptr.setAttributeNS(null,    "class",                          "rPointer");
+     // Translate the graph so the origin, where the axes cross, is at 0,0.
+     group      = document.createElementNS(svgNS,                        "g");
+     group.setAttributeNS(null, "transform",   "translate(" + xOffset + "," + yOffset + ")"); 
 
-  ptrGroup.appendChild(ptr);
-  defs.appendChild(ptrGroup);
+     defs       = document.createElementNS(svgNS,                     "defs");
+     clipPath   = document.createElementNS(svgNS,                 "clipPath");
+     clipPath.setAttributeNS(null,   "id",                        "plotClip");
+     clipRect   = document.createElementNS(svgNS,                     "rect");
+     clipRect.setAttributeNS(null,    "x",                                 0);
+     clipRect.setAttributeNS(null,    "y",                                 0);
+     clipRect.setAttributeNS(null,    "height",                         1000);
+     clipRect.setAttributeNS(null,    "width",                          1000);
+     clipPath.appendChild(clipRect);
+     defs.appendChild(clipPath);
 
-  svg.appendChild(defs);
+     ptrGroup   = document.createElementNS(svgNS,                         "g");
+     // This will be the marker for the current value of r.
+     ptrGroup.setAttributeNS(null,    "id",                         "pointer");
+     ptr        = document.createElementNS(svgNS,                    "circle");
+     ptr.setAttributeNS(null,    "cx",                                      0);
+     ptr.setAttributeNS(null,    "cy",                                      0);
+     ptr.setAttributeNS(null,    "r",                                      12);
+     ptr.setAttributeNS(null,    "class",                          "rPointer");
+     ptrGroup.appendChild(ptr);
+     ptr        = document.createElementNS(svgNS,                    "circle");
+     ptr.setAttributeNS(null,    "cx",                                      0);
+     ptr.setAttributeNS(null,    "cy",                                      0);
+     ptr.setAttributeNS(null,    "r",                                       5);
+     ptr.setAttributeNS(null,    "class",                          "rPointer");
 
-  // Properties for both axes
-  axesGroup  = document.createElementNS(svgNS,                        "g");
-  axesGroup.setAttributeNS(null, "stroke-width",                        5);
-  axesGroup.setAttributeNS(null, "stroke",                        "black");
+     ptrGroup.appendChild(ptr);
+     defs.appendChild(ptrGroup);
 
-  xAxis      = document.createElementNS(svgNS,                     "path");
-  xAxis.setAttributeNS(null, "d",                "M 0 1000 L 1000 1000 Z");
-  yAxis      = document.createElementNS(svgNS,                     "path");
-  yAxis.setAttributeNS(null, "d",                      "M 0 0 L 0 1000 Z");
+     svg.appendChild(defs);
 
-  axesGroup.appendChild(yAxis);
-  axesGroup.appendChild(xAxis);
-  group.appendChild(axesGroup);
+     // Properties for both axes
+     axesGroup  = document.createElementNS(svgNS,                        "g");
+     axesGroup.setAttributeNS(null, "stroke-width",                        5);
+     axesGroup.setAttributeNS(null, "stroke",                        "black");
 
-  markerGroup = document.createElementNS(svgNS,                        "g");
-  markerGroup.setAttributeNS(null, "class",                      "markers");
+     xAxis      = document.createElementNS(svgNS,                     "path");
+     xAxis.setAttributeNS(null, "d",                "M 0 1000 L 1000 1000 Z");
+     yAxis      = document.createElementNS(svgNS,                     "path");
+     yAxis.setAttributeNS(null, "d",                      "M 0 0 L 0 1000 Z");
 
-  // Horizontal line along the top of the graph
-  markerPath = document.createElementNS(svgNS,                     "path");
-  markerPath.setAttributeNS(null, "d",                 "M 0 0 L 1000 0 Z");
-  markerGroup.appendChild(markerPath);
+     axesGroup.appendChild(yAxis);
+     axesGroup.appendChild(xAxis);
+     group.appendChild(axesGroup);
 
-  // Horizontal line through the middle
-  markerPath = document.createElementNS(svgNS,                     "path");
-  markerPath.setAttributeNS(null, "d",             "M 0 500 L 1000 500 Z");
-  markerGroup.appendChild(markerPath);
+     markerGroup = document.createElementNS(svgNS,                        "g");
+     markerGroup.setAttributeNS(null, "class",                      "markers");
 
-  // Vertical line along the right edge.
-  markerPath = document.createElementNS(svgNS,                     "path");
-  markerPath.setAttributeNS(null, "d",           "M 1000 0 L 1000 1000 Z");
-  markerGroup.appendChild(markerPath);
+     // Horizontal line along the top of the graph
+     markerPath = document.createElementNS(svgNS,                     "path");
+     markerPath.setAttributeNS(null, "d",                 "M 0 0 L 1000 0 Z");
+     markerGroup.appendChild(markerPath);
 
-  // Vertical line through the center.
-  markerPath = document.createElementNS(svgNS,                     "path");
-  markerPath.setAttributeNS(null, "d",             "M 500 0 L 500 1000 Z");
-  markerGroup.appendChild(markerPath);
+     // Horizontal line through the middle
+     markerPath = document.createElementNS(svgNS,                     "path");
+     markerPath.setAttributeNS(null, "d",             "M 0 500 L 1000 500 Z");
+     markerGroup.appendChild(markerPath);
 
-  yMaxLabel  = document.createElementNS(svgNS,                     "text");
-  yMaxLabel.setAttributeNS(null, "x",                              "-10");
-  yMaxLabel.setAttributeNS(null, "y",                               "10");
-  yMaxLabel.setAttributeNS(null, "class",                    "axisLabel");
-  yMaxLabel.appendChild(document.createTextNode(yMax));
-  markerGroup.appendChild(yMaxLabel);
+     // Vertical line along the right edge.
+     markerPath = document.createElementNS(svgNS,                     "path");
+     markerPath.setAttributeNS(null, "d",           "M 1000 0 L 1000 1000 Z");
+     markerGroup.appendChild(markerPath);
 
-  yMidLabel  = document.createElementNS(svgNS,                     "text");
-  yMidLabel.setAttributeNS(null, "x",                              "-10");
-  yMidLabel.setAttributeNS(null, "y",                              "510");
-  yMidLabel.setAttributeNS(null, "class",                    "axisLabel");
-  yMidLabel.appendChild(document.createTextNode((yMin+yMax)/2));
-  markerGroup.appendChild(yMidLabel);
+     // Vertical line through the center.
+     markerPath = document.createElementNS(svgNS,                     "path");
+     markerPath.setAttributeNS(null, "d",             "M 500 0 L 500 1000 Z");
+     markerGroup.appendChild(markerPath);
 
-  xMidLabel  = document.createElementNS(svgNS,                     "text");
-  xMidLabel.setAttributeNS(null, "x",                              "510");
-  xMidLabel.setAttributeNS(null, "y",                             "1030");
-  xMidLabel.setAttributeNS(null, "class",                    "axisLabel");
-  xMidLabel.appendChild(document.createTextNode((xMin+xMax)/2));
-  markerGroup.appendChild(xMidLabel);
+     yMaxLabel  = document.createElementNS(svgNS,                     "text");
+     yMaxLabel.setAttributeNS(null, "x",                              "-10");
+     yMaxLabel.setAttributeNS(null, "y",                               "10");
+     yMaxLabel.setAttributeNS(null, "class",                    "axisLabel");
+     yMaxLabel.appendChild(document.createTextNode(yMax));
+     markerGroup.appendChild(yMaxLabel);
 
-  xMaxLabel  = document.createElementNS(svgNS,                     "text");
-  xMaxLabel.setAttributeNS(null, "x",                             "1010");
-  xMaxLabel.setAttributeNS(null, "y",                             "1030");
-  xMaxLabel.setAttributeNS(null, "class",                    "axisLabel");
-  xMaxLabel.appendChild(document.createTextNode(xMax));
-  markerGroup.appendChild(xMaxLabel);
+     yMidLabel  = document.createElementNS(svgNS,                     "text");
+     yMidLabel.setAttributeNS(null, "x",                              "-10");
+     yMidLabel.setAttributeNS(null, "y",                              "510");
+     yMidLabel.setAttributeNS(null, "class",                    "axisLabel");
+     yMidLabel.appendChild(document.createTextNode((yMin+yMax)/2));
+     markerGroup.appendChild(yMidLabel);
 
-  axisLabel  = document.createElementNS(svgNS,                     "text");
-  axisLabel.setAttributeNS(null, "x",                               "-50");
-  axisLabel.setAttributeNS(null, "y",                               "510");
-  axisLabel.setAttributeNS(null, "transform",       "rotate(-90 -50,510)");
-  axisLabel.setAttributeNS(null, "class",                     "axisLabel");
-  axisLabel.appendChild(document.createTextNode(yLabel));
-  markerGroup.appendChild(axisLabel);
+     xMidLabel  = document.createElementNS(svgNS,                     "text");
+     xMidLabel.setAttributeNS(null, "x",                              "510");
+     xMidLabel.setAttributeNS(null, "y",                             "1030");
+     xMidLabel.setAttributeNS(null, "class",                    "axisLabel");
+     xMidLabel.appendChild(document.createTextNode((xMin+xMax)/2));
+     markerGroup.appendChild(xMidLabel);
 
-  axisLabel  = document.createElementNS(svgNS,                     "text");
-  axisLabel.setAttributeNS(null, "x",                               "510");
-  axisLabel.setAttributeNS(null, "y",                              "1055");
-  axisLabel.setAttributeNS(null, "class",                     "axisLabel");
-  axisLabel.appendChild(document.createTextNode(xLabel));
-  markerGroup.appendChild(axisLabel);
+     xMaxLabel  = document.createElementNS(svgNS,                     "text");
+     xMaxLabel.setAttributeNS(null, "x",                             "1010");
+     xMaxLabel.setAttributeNS(null, "y",                             "1030");
+     xMaxLabel.setAttributeNS(null, "class",                    "axisLabel");
+     xMaxLabel.appendChild(document.createTextNode(xMax));
+     markerGroup.appendChild(xMaxLabel);
 
-  points       = this.computePoints();
+     axisLabel  = document.createElementNS(svgNS,                     "text");
+     axisLabel.setAttributeNS(null, "x",                               "-50");
+     axisLabel.setAttributeNS(null, "y",                               "510");
+     axisLabel.setAttributeNS(null, "transform",       "rotate(-90 -50,510)");
+     axisLabel.setAttributeNS(null, "class",                     "axisLabel");
+     axisLabel.appendChild(document.createTextNode(yLabel));
+     markerGroup.appendChild(axisLabel);
 
-  plot       = document.createElementNS(svgNS,                 "polyline");
-  plot.setAttributeNS(null, "class",                              "curve");
-  plot.setAttributeNS(null, "points",                              points);
-          
-  x         = 15;
-  y         = source.f(x);
-  x = this.mapXToScreen(x);
-  y = this.mapYToScreen(y);
-  pointer   = this.createPointer(x, y);
+     axisLabel  = document.createElementNS(svgNS,                     "text");
+     axisLabel.setAttributeNS(null, "x",                               "510");
+     axisLabel.setAttributeNS(null, "y",                              "1055");
+     axisLabel.setAttributeNS(null, "class",                     "axisLabel");
+     axisLabel.appendChild(document.createTextNode(xLabel));
+     markerGroup.appendChild(axisLabel);
 
-  group.appendChild(markerGroup);
-  group.appendChild(plot);
-  group.appendChild(pointer);
-  svg.appendChild(group);
+     points     = this.computePoints();
 
-  eventHandler       = new lessonControlEventHandler(this, svg);
-  svg.addEventListener("mousewheel",            eventHandler.handleMouseWheel.bind(eventHandler), false);
-  svg.addEventListener("wheel",                 eventHandler.handleMouseWheel.bind(eventHandler), false);
-  svg.addEventListener("mousedown",             eventHandler.handleMouseDown.bind(eventHandler),  false);
-  document.addEventListener("mouseup",          eventHandler.handleMouseUp.bind(eventHandler),    false);
-  document.addEventListener("mousemove",        eventHandler.handleMouseMove.bind(eventHandler),  false);
-  svg.addEventListener("touchstart",            eventHandler.handleTouchStart.bind(eventHandler), false);
-  svg.addEventListener("touchmove",             eventHandler.handleTouchMove.bind(eventHandler),  false);
-  document.addEventListener("touchend",         eventHandler.handleTouchEnd.bind(eventHandler),   false);
-  document.addEventListener(xLabel + "Changed", eventHandler.handleXChanged.bind(eventHandler),   false);
-}
+     plot       = document.createElementNS(svgNS,                 "polyline");
+     plot.setAttributeNS(null, "class",                              "curve");
+     plot.setAttributeNS(null, "points",                              points);
+
+     x         = 15;
+     y         = source.f(x);
+     x = this.mapXToScreen(x);
+     y = this.mapYToScreen(y);
+     pointer   = this.createPointer(x, y);
+
+     group.appendChild(markerGroup);
+     group.appendChild(plot);
+     group.appendChild(pointer);
+     svg.appendChild(group);
+
+     eventHandler = new ns.LessonControlEventHandler(this, svg);
+     svg.addEventListener("mousewheel",            eventHandler.handleMouseWheel.bind(eventHandler), false);
+     svg.addEventListener("wheel",                 eventHandler.handleMouseWheel.bind(eventHandler), false);
+     svg.addEventListener("mousedown",             eventHandler.handleMouseDown.bind(eventHandler),  false);
+     document.addEventListener("mouseup",          eventHandler.handleMouseUp.bind(eventHandler),    false);
+     document.addEventListener("mousemove",        eventHandler.handleMouseMove.bind(eventHandler),  false);
+     svg.addEventListener("touchstart",            eventHandler.handleTouchStart.bind(eventHandler), false);
+     svg.addEventListener("touchmove",             eventHandler.handleTouchMove.bind(eventHandler),  false);
+     document.addEventListener("touchend",         eventHandler.handleTouchEnd.bind(eventHandler),   false);
+     document.addEventListener(xLabel + "Changed", eventHandler.handleXChanged.bind(eventHandler),   false);
+   }
+}(window.vizit.lesson));
