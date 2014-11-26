@@ -101,7 +101,7 @@ window.vizit.lesson = window.vizit.lesson || {};
    }
 
    /**
-    * Add behavior to lessonRangedSource elements.
+    * Add behavior to RangedSource elements.
     */
    ns.RangedSource = function (element)
    {
@@ -125,10 +125,13 @@ window.vizit.lesson = window.vizit.lesson || {};
      max        = theElement.getAttribute("data-max");
      min        = theElement.getAttribute("data-min");
      step       = theElement.getAttribute("data-step");
-     value      = theElement.getAttribute("data-value");
      id         = name + "_" + this.getIdFor(name);
 
-     if (typeof value === 'undefined')
+     if (theElement.hasAttribute("data-value"))
+     {
+       value      = theElement.getAttribute("data-value");
+     }
+     else
      {
        value = theElement.innerHTML;
      }

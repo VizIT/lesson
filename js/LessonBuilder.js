@@ -44,11 +44,19 @@ window.vizit.lesson = window.vizit.lesson || {};
        for(var i=elements.length; i--;)
        {
          element = elements[i];
-         type    = element.getAttribute("data-type");
-         // TODO use regex matching
-         if (type.toLowerCase() === "rangedsource")
+         if (element.hasAttribute("data-type"))
          {
-           new ns.RangedSource(element);
+           type    = element.getAttribute("data-type").toLowerCase();
+
+           // TODO use regex matching
+           if (type === "rangedsource")
+           {
+             new ns.RangedSource(element);
+           }
+           else if (type === "setter")
+           {
+             new ns.Setter(element);
+           }
          }
        }
      }
