@@ -7,10 +7,10 @@ JAVA=/usr/bin/java
 CLOSURE_HOME=/opt/closure
 
 $JAVA -jar $CLOSURE_HOME/compiler.jar --js current_license.js \
-  IdRegistry.js RangedSource.js LessonBuilder.js \
+  IdRegistry.js RangedSource.js Setter.js SurfaceExtensionEventListiner.js \
   MappingEventHandler.js DirectEventHandler.js GaussianSurfaceRChangedEventListiner.js \
   LessonContentEventHandler.js  LessonContentEventSource.js LessonControlEventHandler.js \
   ModelImageEventHandler.js  RadialDependencyAdaptor.js  DotRAdapter.js \
-  SurfaceExtensionEventListiner.js ToExpression.js XvsYController.js \
+  ToExpression.js XvsYController.js LessonBuilder.js \
   --js_output_file Lesson.min.js
 
