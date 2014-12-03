@@ -10,7 +10,8 @@
   padding:          .20em .5em;
   text-shadow:      0 1px 1px white;
   margin:           0;
-  text-decoration:  none;
+  color:            inherit;
+  font:             inherit;
 }
 
 /* https://developer.mozilla.org/en-US/docs/Web/CSS/linear-gradient */

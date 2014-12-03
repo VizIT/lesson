@@ -98,8 +98,7 @@ window.vizit.lesson = window.vizit.lesson || {};
          newElement.setAttribute("title", desc);
        }
 
-       tmp           =  document.createElement("a");
-       tmp.setAttribute("href", "#");
+       tmp           =  document.createElement("button");
        tmp.setAttribute("class", "setter");
 
        if (typeof content != "undefined")
