@@ -66,13 +66,14 @@ window.vizit.lesson = window.vizit.lesson || {};
       */
      this.initWhenReady  = function()
      {
+       console.log(document.readyState);
        if (document.readyState === "interactive" || document.readyState === "complete")
        {
          this.init();
        }
        else
        {
-         document.addEventListener("DOMContentLoaded", this.findElements, false);
+         document.addEventListener("DOMContentLoaded", this.init, false);
        }
      }
    }
