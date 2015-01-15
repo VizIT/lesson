@@ -66,7 +66,6 @@ window.vizit.lesson = window.vizit.lesson || {};
       */
      this.initWhenReady  = function()
      {
-       console.log(document.readyState);
        if (document.readyState === "interactive" || document.readyState === "complete")
        {
          this.init();
