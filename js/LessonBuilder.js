@@ -72,7 +72,7 @@ window.vizit.lesson = window.vizit.lesson || {};
        }
        else
        {
-         document.addEventListener("DOMContentLoaded", this.init, false);
+	   document.addEventListener("DOMContentLoaded", this.init, false);
        }
      }
    }
