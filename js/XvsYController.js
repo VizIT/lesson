@@ -365,4 +365,4 @@ window.vizit.lesson = window.vizit.lesson || {};
      document.addEventListener("touchend",         eventHandler.handleTouchEnd.bind(eventHandler),   false);
      document.addEventListener(xLabel + "Changed", eventHandler.handleXChanged.bind(eventHandler),   false);
    }
-}(window.vizit.lesson));
+})(window.vizit.lesson);

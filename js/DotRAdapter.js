@@ -81,4 +81,4 @@ window.vizit.lesson = window.vizit.lesson || {};
      ry      = sinTheta*sinPhi;
      rz      = cosPhi;
    }
-}(window.vizit.lesson));
+})(window.vizit.lesson);

@@ -19,7 +19,7 @@
 window.vizit        = window.vizit        || {};
 window.vizit.lesson = window.vizit.lesson || {};
 
-(function (ns)
+(function(ns)
  {
    /**
     * Adaptor to map a field(r) to field(x,y,z) for a radially
@@ -61,7 +61,7 @@ window.vizit.lesson = window.vizit.lesson || {};
 
        field   = source.getField(x, y, z);
        return Math.sqrt(field[0] * field[0] + field[1] * field[1] + field[2] * field[2]);
-     }
+     };
 
      source = source_;
      x0     = x0_;
@@ -74,5 +74,6 @@ window.vizit.lesson = window.vizit.lesson || {};
      cosTheta    = Math.cos(theta);
      sinPhi      = Math.sin(phi);
      cosPhi      = Math.cos(phi);
-   }
-}(window.vizit.lesson));
+   };
+})(window.vizit.lesson);
+

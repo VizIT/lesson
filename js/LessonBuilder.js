@@ -82,4 +82,4 @@ window.vizit.lesson = window.vizit.lesson || {};
    lessonBuilder = new ns.LessonBuilder();
    lessonBuilder.initWhenReady();
 
- }(window.vizit.lesson));
+ })(window.vizit.lesson);

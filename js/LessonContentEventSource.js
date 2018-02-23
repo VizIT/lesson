@@ -76,4 +76,4 @@ window.vizit.lesson = window.vizit.lesson || {};
        elements[i].addEventListener(eventType,   this.handleEvent,    false);
      }
    }
-}(window.vizit.lesson));
+})(window.vizit.lesson);

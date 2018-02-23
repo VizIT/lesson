@@ -125,4 +125,4 @@ window.vizit.lesson = window.vizit.lesson || {};
 
      this.init(element);
    }
-}(window.vizit.lesson));
+})(window.vizit.lesson);

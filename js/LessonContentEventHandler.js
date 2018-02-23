@@ -128,4 +128,4 @@ window.vizit.lesson = window.vizit.lesson || {};
      expression = expression_;
      document.addEventListener(eventType,   this.handleEvent.bind(this),    false);
    }
-}(window.vizit.lesson));
+})(window.vizit.lesson);
