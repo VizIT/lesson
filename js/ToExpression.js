@@ -84,4 +84,4 @@ window.vizit.lesson = window.vizit.lesson || {};
      }
      document.addEventListener(xName + "Changed",   this.handleEvent.bind(this),    false);
    }
-}(window.vizit.lesson));
+})(window.vizit.lesson);

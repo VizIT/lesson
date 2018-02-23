@@ -19,7 +19,7 @@
 window.vizit        = window.vizit        || {};
 window.vizit.lesson = window.vizit.lesson || {};
 
-(function (ns)
+(function(ns)
  {
    /**
     * Handle mouse and touch events for lesson controler graphics.
@@ -310,4 +310,5 @@ window.vizit.lesson = window.vizit.lesson || {};
        }
      }
    }
-}(window.vizit.lesson));
+})(window.vizit.lesson);
+

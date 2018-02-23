@@ -44,10 +44,10 @@ input.helpCheck
 
 section.modelHelp
 {
-  width:                  100%;
-  max-height:              0px;
+  width:                100%;
+  max-height:           0px;
   overflow:             hidden;
-  transition:   max-height 2s ease;
+  transition:           max-height 2s ease;
 }
 
 #modelHelpCheck:checked ~ section.modelHelp
@@ -236,13 +236,6 @@ svg.controller:hover .rPointer
   stroke-width:              3;
   fill:                   none;
   clip-path:    url(#plotClip);
-}
-
-.clearfix:after
-{
-  content:                  "";
-  display:               block;
-  clear:                  both;
 }
 
 section.explination

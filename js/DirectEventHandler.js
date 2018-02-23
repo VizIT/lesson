@@ -47,4 +47,4 @@ window.vizit.lesson = window.vizit.lesson || {};
      updater   = updater_;
      framework = framework_;
    }
- }(window.vizit.lesson));
+ })(window.vizit.lesson);

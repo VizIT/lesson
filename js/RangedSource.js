@@ -173,4 +173,4 @@ window.vizit.lesson = window.vizit.lesson || {};
    // Common registry to ensure unique Id's on a page.
    ns.RangedSource.prototype = ns.utility.idRegistry;
 
- }(window.vizit.lesson));
+ })(window.vizit.lesson);
