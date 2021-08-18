@@ -1,3 +1,53 @@
+/*
+ *  Copyright 2014-2021 Vizit Solutions
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+/*
+ * Css to support the look and feel for lesson framework components.
+ */
+
+.markers
+{
+  fill:                   none;
+  stroke:              #B0B0B0;
+  stroke-width:              5;
+  stroke-dasharray:        2 4;
+  text-anchor:             end;
+}
+
+text.axisLabel
+{
+  fill:                  black;
+  stroke:                 none;
+}
+
+.rPointer
+{
+  stroke:                black;
+  stroke-width:              2;
+  fill:                    red;
+}
+
+.curve
+{
+  stroke:                  red;
+  stroke-width:              3;
+  fill:                   none;
+  clip-path:    url(#plotClip);
+}
+
 .setter
 {
   box-shadow:       inset 0px 1px 0px rgba(255, 255, 255, 0.5),
@@ -10,8 +60,7 @@
   padding:          .20em .5em;
   text-shadow:      0 1px 1px white;
   margin:           0;
-  color:            inherit;
-  font:             inherit;
+  text-decoration:  none;
 }
 
 /* https://developer.mozilla.org/en-US/docs/Web/CSS/linear-gradient */
@@ -26,14 +75,11 @@
 
 .setter:active
 {
-  -webkit-box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3), 0px 1px 0px white;
-  -moz-box-shadow:    inset 0px 1px 3px rgba(0, 0, 0, 0.3), 0px 1px 0px white;
   box-shadow:         inset 0px 1px 3px rgba(0, 0, 0, 0.3), 0px 1px 0px white;
   text-shadow:        0px 1px 0px rgba(255, 255, 255, 0.4);
   background:         #eeeeee;
   color:              #bbbbbb;
 }
-
 
 span.lessonRangedSource
 {
@@ -48,7 +94,6 @@ span.lessonRangedSource
 
 }
 
-
 input.lessonRangedSource[type="range"]
 {
   -webkit-appearance: none;
@@ -58,7 +103,7 @@ input.lessonRangedSource[type="range"]
   width:              11em;
   position:           absolute;
   bottom:             1.1em;
-  left:               -5em;	
+  left:               -5em;
   background:         #1d2e38;
   border-radius:      20px;
   opacity:            0;
@@ -90,7 +135,7 @@ input.lessonRangedSource[type="range"]::-webkit-slider-thumb
   box-shadow:            0px 6px 5px 0px rgba(0,0,0,0.6);
   border-radius:         40px;
   background-image:      -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ebf1f6), color-stop(50%,#abd3ee), color-stop(51%,#89c3eb), color-stop(100%,#d5ebfb));
-  background:            linear-gradient(to left bottom, #ebf1f6, 0%, #abd3ee, 50%, #89c3eb, 51%, #d5ebfb, 100%);
+  background:            linear-gradient(to left bottom, #ebf1f6 0%, #abd3ee 50%, #89c3eb 51%, #d5ebfb 100%);
 }
 
 /* Duplicate of the above with moz selector */
@@ -108,5 +153,37 @@ input.lessonRangedSource[type="range"]::-moz-range-thumb
   box-shadow:            0px 6px 5px 0px rgba(0,0,0,0.6);
   border-radius:         40px;
   background-image:      -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ebf1f6), color-stop(50%,#abd3ee), color-stop(51%,#89c3eb), color-stop(100%,#d5ebfb));
-  background:            linear-gradient(to left bottom, #ebf1f6, 0%, #abd3ee, 50%, #89c3eb, 51%, #d5ebfb, 100%);
+  background:            linear-gradient(to left bottom, #ebf1f6 0%, #abd3ee 50%, #89c3eb 51%, #d5ebfb 100%);
+}
+
+div.snapshot {
+  position: absolute;
+  z-index: 9;
+  background-color: #f1f1f1;
+  border: 1px solid #d3d3d3;
+}
+
+div.snapshotHeader {
+  padding: 10px;
+  cursor: move;
+  z-index: 10;
+  background-color: #2196F3;
+  color: #fff;
+}
+
+button.divControl {
+  float: right;
+  appearance: none;
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+}
+
+button.divControl:hover,
+button.divControl:focus {
+  background-color: rgba(0, 0, 0, .25);
+  outline: none;
+}
+
+img.snapshot {
+  width: 100%
 }

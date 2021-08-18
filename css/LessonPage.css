@@ -1,0 +1,274 @@
+/*
+ * Css for lesson web pages, examples and documentation.
+ */
+
+h3, h4
+{
+  margin-top:             .5em;
+  margin-bottom:          .5em;
+}
+
+article,
+aside,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section
+{
+  display:               block;
+}
+
+.model
+{
+  margin:                    0;
+  padding:                 2em;
+  width:                   50%;
+}
+
+.model span
+{
+  display:        inline-block;
+  position:           relative;
+  width:                  100%;
+}
+
+.model canvas,
+.model img
+{
+  width:                  100%;
+}
+
+input.helpCheck
+{
+  display:                none;
+}
+
+section.modelHelp
+{
+  width:                100%;
+  max-height:           0px;
+  overflow:             hidden;
+  transition:           max-height 2s ease;
+}
+
+#modelHelpCheck:checked ~ section.modelHelp
+{
+  max-height:           300px;
+}
+
+section.noWebGL
+{
+  width:                  100%;
+  max-height:              0px;
+  overflow:             hidden;
+  transition:   max-height 2s ease;
+}
+
+#noWebGLCheck:checked ~ section.noWebGL
+{
+  max-height:           300px;
+}
+
+/* Specific position for the help icon */
+div.helpHelpIcon
+{
+  bottom:     3px;
+  right:      3px;
+}
+
+/* Set display to block if no WebGL on platform */
+div.infoHelpIcon
+{
+  bottom:      3px;
+  right:      38px;
+  display:    none;
+}
+
+div.helpIcon
+{
+  position:           absolute;
+  padding:            0;
+  margin:             0;
+  height:             32px;
+  width:              32px;
+  font-size:          1.5em;
+  font-style:         italic;
+  text-align:         center;
+  /* Guarantees a circular div */
+  border-radius:      50%;
+  /*background-image:   radial-gradient(50% 0%, circle cover, white, black);*/
+  background-image: radial-gradient(circle, white, black);
+  background-position: 50% 0%;
+  opacity:            0.3;
+  transition:         opacity 0.5s linear;
+  -webkit-transition: opacity 0.5s linear;
+  -moz-transition:    opacity 0.5s linear;
+  -ms-transition:     opacity 0.5s linear;
+  -o-transition:      opacity 0.5s linear;
+  cursor:             pointer;
+}
+
+div.helpIcon:hover
+{
+   opacity:           1.0;
+}
+
+div.helpIcon2
+{
+  border:         0;
+  position:      absolute;
+  padding:        0;
+  margin:         0;
+  bottom:         3px;
+  right:          3px;
+  height:        26px;
+  width:         26px;
+  border-radius: 50%;
+  background-image: -webkit-radial-gradient(50% 100%, circle cover, white, black);
+  background-image: -moz-radial-gradient(   50% 100%, circle cover, white, black);
+  background-image: -ms-radial-gradient(    50% 100%, circle cover, white, black);
+  background-image: -o-radial-gradient(     50% 100%, circle cover, white, black);
+  background-image: radial-gradient(        50% 100%, circle cover, white, black);
+}
+
+div.helpIcon3
+{
+  border:             0;
+  position:           absolute;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing:    content-box;
+  box-sizing:         content-box;
+  padding:            0;
+  margin:             0;
+  bottom:              1px;
+  right:               1px;
+  height:             24px;
+  width:              24px;
+  font-family:        serif;
+  font-size:          24px;
+  border-radius:      50%;
+  background:         #216EDA;
+  background-image:   -webkit-radial-gradient(50% 100%, circle cover, rgba(79, 238, 255, 1), rgba(79, 238, 255, 0));
+  background-image:   -moz-radial-gradient(   50% 100%, circle cover, rgba(79, 238, 255, 1), rgba(79, 238, 255, 0));
+  background-image:   -ms-radial-gradient(    50% 100%, circle cover, rgba(79, 238, 255, 1), rgba(79, 238, 255, 0));
+  background-image:   -o-radial-gradient(     50% 100%, circle cover, rgba(79, 238, 255, 1), rgba(79, 238, 255, 0));
+  background-image:   radial-gradient(        50% 100%, circle cover, rgba(79, 238, 255, 1), rgba(79, 238, 255, 0));
+}
+
+div.infoIcon3
+{
+  border:             0;
+  position:           absolute;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing:    content-box;
+  box-sizing:         content-box;
+  padding:            0;
+  margin:             0;
+  bottom:             1px;
+  right:              1px;
+  height:             24px;
+  width:              24px;
+  font-family:        serif;
+  font-size:          24px;
+  border-radius:      50%;
+  background:         #b8a901;
+  background-image:   -webkit-radial-gradient(50% 100%, circle cover, rgba(253, 245, 150, 1), rgba(253, 245, 150, 0));
+  background-image:   -moz-radial-gradient(   50% 100%, circle cover, rgba(253, 245, 150, 1), rgba(253, 245, 150, 0));
+  background-image:   -ms-radial-gradient(    50% 100%, circle cover, rgba(253, 245, 150, 1), rgba(253, 245, 150, 0));
+  background-image:   -o-radial-gradient(     50% 100%, circle cover, rgba(253, 245, 150, 1), rgba(253, 245, 150, 0));
+  background-image:   radial-gradient(        50% 100%, circle cover, rgba(253, 245, 150, 1), rgba(253, 245, 150, 0));
+}
+
+figure.controller
+{
+  padding:                 2em;
+  margin:                    0;
+  width:                   50%;
+}
+
+svg.controller
+{
+  /* Positioning is necessary to generate a separate z-stacking context */
+  position:           relative;
+  z-index:                   2;
+  padding:                   0;
+  margin:                    0;
+  width:                  100%;
+  /** Workaround for WebKit layout bug. */
+  max-height:             100%;
+}
+
+section.explination
+{
+  width:                   75%;
+  float:                  left;
+  margin:                    0;
+  padding-left:              0;
+  padding-right:          20px;
+  padding-top:               0;
+  padding-bottom:            0;
+}
+
+aside
+{
+  width:                   25%;
+  float:                 right;
+  padding-left:           20px;
+}
+
+/** For narrow screens, have the aside follow the explination, e.g., http://css-tricks.com/examples/ViewportTypography/ */
+@media (max-width: 800px)
+{
+  section.explination,
+  aside
+  {
+    width:                auto;
+    float:                none;
+   }
+}
+
+.mathTextColor
+{
+  color:               #000066;
+}
+
+.mathTextFont
+{
+  font-family:  Tahoma, Arial, sans-serif;
+  font-size:           smaller;
+}
+
+sup.footmarker
+{
+  font-size:  smaller;
+}
+
+span.footnote
+{
+  visibility: hidden;
+  position:   fixed;
+  top:        1em;
+  right:      1em;
+  width:      12em;
+  border:     1px solid #000;
+  background: #dd0;
+  padding:    1em;
+}
+
+sup.footmarker:hover + span.footnote
+{
+  visibility: visible;
+}
+
+.fixed
+{
+  position:           fixed; 
+  width:              100%;
+  top:                0;
+  padding-left:       5%;
+  padding-right:      5%;
+  z-index:            10;
+}
