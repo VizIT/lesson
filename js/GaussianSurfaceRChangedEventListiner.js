@@ -35,7 +35,6 @@ window.vizit.lesson = window.vizit.lesson || {};
    {
      var renderer;
      var target;
-     var targetID;
 
      renderer      = renderer_;
      target        = target_;
@@ -58,4 +57,4 @@ window.vizit.lesson = window.vizit.lesson || {};
        renderer.render();
      }
    }
- })(window.vizit.lesson);
+ }(window.vizit.lesson));

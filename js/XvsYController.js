@@ -28,7 +28,6 @@ window.vizit.lesson = window.vizit.lesson || {};
    {
      var axesGroup;
      var axisLabel;
-     var CUSTOM_EVENT;
      var clipPath;
      var clipRect;
      var defs;
@@ -38,7 +37,6 @@ window.vizit.lesson = window.vizit.lesson || {};
      var group;
      var markerGroup;
      var markerPath;
-     var markerText;
      var plot;
      var pointer;
      var points;
@@ -51,7 +49,6 @@ window.vizit.lesson = window.vizit.lesson || {};
      var x, xAxis, xLabel, xMin, xMax, xMidLabel, xMaxLabel, xOffset, xScale;
      var y, yAxis, yLabel, yMin, yMax, yMidLabel, yMaxLabel, yOffset, yScale;
 
-     CUSTOM_EVENT = "CustomEvent";
      deltaX       = 0.1;
      source       = source_;
      svg          = svg_;
@@ -92,20 +89,16 @@ window.vizit.lesson = window.vizit.lesson || {};
        return x;
      }
 
-     this.mapYToScreen   = function(y)
-     {
+     this.mapYToScreen = function (y) {
        // This should put negative and positive infinity where they are clipped.
        // SVG has a habbit of clipping the entire curve if it extends to infinity.
-       if (y > yMax)
-       {
-	 y = yMax + 10;
-       }
-       else if (y < yMin)
-       {
-	 y = yMin - 10;
+       if (y > yMax) {
+         y = yMax + 10;
+       } else if (y < yMin) {
+         y = yMin - 10;
        }
        // SVG coordinates have y=0 at the top, increasing downwards.
-       return 1000 - (y-yMin)*yScale;
+       return 1000 - (y - yMin) * yScale;
      }
 
      this.createPointer     = function(x, y)
@@ -124,65 +117,62 @@ window.vizit.lesson = window.vizit.lesson || {};
 
      this.dispatchXChangedEvent = function()
      {
-       var defaultCanceled;
-       var event;
-
-       event = document.createEvent(CUSTOM_EVENT);
-       event.initCustomEvent(xLabel + "Changed", true, true, {"value": x, "source": svg.id});
-       // Default returned, true if any handler invoked prevent default - do we care?
-       svg.dispatchEvent(event);
+       const newEvent = new CustomEvent(xLabel + "Changed", {
+         detail: {
+           value: x,
+           source: svg.id
+         },
+         bubbles: true,
+         cancelable: true,
+         composed: false,
+       });
+       svg.dispatchEvent(newEvent);
      }
 
      /**
       * Invoked in response to an externally sourced event, do not generate another event.
       */
-     this.setX                  = function(x)
-     {
+     this.setX = function (x) {
        this.x = x;
-       if (x>=xMin && x<=xMax)
-       {
-	 y = source.f(x);
+       if (x >= xMin && x <= xMax) {
+         y = source.f(x);
 
-	 pointer.x.baseVal.value = this.mapXToScreen(x);
-	 pointer.y.baseVal.value = this.mapYToScreen(y);
+         pointer.x.baseVal.value = this.mapXToScreen(x);
+         pointer.y.baseVal.value = this.mapYToScreen(y);
        }
      }
 
      /**
       * Invoked in our click processing, so we want to generate an event for others.
       */
-     this.setScreenX            = function(x_)
-     {
+     this.setScreenX = function (x_) {
        x_ = this.mapRawToGroupX(x_);
-       x  = this.mapScreenToX(x_);
+       x = this.mapScreenToX(x_);
 
-       if (x>xMin && x<xMax)
-       {
-	 y = source.f(x);
-	 y = this.mapYToScreen(y);
+       if (x > xMin && x < xMax) {
+         y = source.f(x);
+         y = this.mapYToScreen(y);
 
-	 pointer.x.baseVal.value = x_;
-	 pointer.y.baseVal.value = y;
+         pointer.x.baseVal.value = x_;
+         pointer.y.baseVal.value = y;
 
-	 this.dispatchXChangedEvent();
+         this.dispatchXChangedEvent();
        }
      }
 
-     this.computePoints         = function()
-     {
+     this.computePoints = function () {
        var x, y;
-       points     = "";
-       for(x=xMin; x<xMax; x+=deltaX)
-       {
-	 y       = source.f(x);
-	 points += this.mapXToScreen(x);
-	 points += ","
-	 points += this.mapYToScreen(y);
-	 points += " ";
+       points = "";
+       for (x = xMin; x < xMax; x += deltaX) {
+         y = source.f(x);
+         points += this.mapXToScreen(x);
+         points += ","
+         points += this.mapYToScreen(y);
+         points += " ";
        }
 
        // Trim off trailing space.
-       points = points.substring(0, points.length-1);
+       points = points.substring(0, points.length - 1);
 
        return points;
      }
@@ -365,4 +355,4 @@ window.vizit.lesson = window.vizit.lesson || {};
      document.addEventListener("touchend",         eventHandler.handleTouchEnd.bind(eventHandler),   false);
      document.addEventListener(xLabel + "Changed", eventHandler.handleXChanged.bind(eventHandler),   false);
    }
-})(window.vizit.lesson);
+}(window.vizit.lesson));

@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- *  Copyright 2014 Vizit Solutions
+ *  Copyright 2021 Vizit Solutions
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,29 +22,23 @@ window.vizit.lesson = window.vizit.lesson || {};
 (function (ns)
  {
    /**
-    * Invoke update method without any mapping of the event value.
-    *
-    * @param {Function} updater A Function that updates the desired value on an
-    *                           element of the visualization.
-    *
-    * @class
+    * Rerender the scene after updating the state.
     */
-   ns.DirectEventHandler = function(updater_, framework_)
-   {
-     var updater;
-     var framework;
-
-     this.handleUpdate = function(event)
-     {
-       var detail;
-
-       detail = event.detail;
-
-       updater(detail.value);
-       framework.requestRender();
+   ns.RenderingEventHandler = class extends ns.EventHandler {
+     /**
+      *
+      * @param {Function} updater A Function that updates the desired value on an
+      *                           element of the visualization.
+      * @param {Object} renderable_ An object that implements the requestRender method.
+      */
+     constructor(updater_, renderable_) {
+       super(updater_)
+       this.renderable = renderable_;
      }
 
-     updater   = updater_;
-     framework = framework_;
+     handleUpdate (event) {
+       super.handleUpdate(event);
+       this.renderable.requestRender();
+     }
    }
  }(window.vizit.lesson));

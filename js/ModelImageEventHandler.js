@@ -42,21 +42,16 @@ window.vizit.lesson = window.vizit.lesson || {};
 
      this.handleEvent   = function(event)
      {
-       var detail;
-       var i;
-       var value;
+       const detail  = event.detail;
+       const value   = detail.value;
+       const nvalues = values.length;
+       let i = 0;
 
-       detail = event.detail;
-       value  = detail.value;
-
-       for (i=0, nvalues=values.length; i<nvalues; ++i)
-       {
-	 if (values[i] > value)
-	 {
-	   break;
-	 }
+       for (i=0; i < nvalues; ++i) {
+         if (values[i] > value) {
+           break;
+         }
        }
-
        image.src = images[i];
      }
 
@@ -65,17 +60,15 @@ window.vizit.lesson = window.vizit.lesson || {};
      values    = new Array();
      xName     = xName_;
 
-     for (var i=0, nargs=imagesAndValues.length; i<nargs; i++)
-     {
-       if (i%2 == 0)
-       {
-	 images.push(imagesAndValues[i]);
-       }
-       else
-       {
-	 values.push(imagesAndValues[i]);
+     const nargs = imagesAndValues.length;
+     for (let j = 0; j < nargs; j++) {
+       if (j % 2 === 0) {
+         images.push(imagesAndValues[j]);
+       } else {
+         values.push(imagesAndValues[j]);
        }
      }
+
      document.addEventListener(xName + "Changed",   this.handleEvent.bind(this),    false);
    }
- })(window.vizit.lesson);
+ }(window.vizit.lesson));

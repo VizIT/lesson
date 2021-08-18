@@ -11,6 +11,11 @@ $JAVA -jar $CLOSURE_HOME/compiler.jar --js current_license.js \
   MappingEventHandler.js DirectEventHandler.js GaussianSurfaceRChangedEventListiner.js \
   LessonContentEventHandler.js  LessonContentEventSource.js LessonControlEventHandler.js \
   ModelImageEventHandler.js  RadialDependencyAdaptor.js  DotRAdapter.js \
-  ToExpression.js XvsYController.js LessonBuilder.js \
-  --js_output_file Lesson.min.js
+  ToExpression.js XvsYController.js EventHandler.js RenderingEventHandler.js \
+  GlobalDragAndDrop.js CanvasSnapshooter.js LessonBuilder.js \
+  --language_in ES6 \
+  --language_out ES6 \
+  --js_output_file Lesson.min.js \
+  --create_source_map="Lesson.min.js.map"
 
+echo //# sourceMappingURL=Lesson.min.js.map >> Lesson.min.js

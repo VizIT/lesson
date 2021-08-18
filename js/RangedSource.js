@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- *  Copyright 2014 Vizit Solutions
+ *  Copyright 2021 Vizit Solutions
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -61,37 +61,33 @@ window.vizit.lesson = window.vizit.lesson || {};
 
      this.emitEvent    = function()
      {
-       var event;
-       var details;
-       // Consider separate object for this. How do object literals effect JS optimization?
-       // Appears to be fine. https://github.com/petkaantonov/bluebird/wiki/Optimization-killers
-       details =
-       {
-         "source": source.id,
-         "name":   name,
-         "value":  source.value
-       }
-
-       event = document.createEvent(ns.CUSTOM_EVENT);
-       event.initCustomEvent(name + "Changed", true, true, details);
-       // Default returned, true if any handler invoked prevent default - do we care?
-       source.dispatchEvent(event);
+       const newEvent = new CustomEvent(name + "Changed", {
+         detail: {
+           source: source.id,
+           name:   name,
+           value:  source.value
+         },
+         bubbles: true,
+         cancelable: true,
+         composed: false,
+       });
+       source.dispatchEvent(newEvent);
      }
 
      this.handleEvent  = function(event)
      {
-       var changeEvent;
-       var details;
-
-       details = event.detail;
+       const details = event.detail;
 
        if (details.source != source.id)
        {
          source.value = details.value;
          // Force a changed event so listeners, such as the output element, will update.
          // Don't use input events here, those are for user updates that trigger Lesson events.
-         changeEvent  = document.createEvent("HTMLEvents");
-         changeEvent.initEvent("change", false, true);
+         const changeEvent = new CustomEvent("change", {
+           bubbles: false,
+           cancelable: true,
+           composed: false,
+         });
          source.dispatchEvent(changeEvent);
        }
      }
@@ -117,7 +113,6 @@ window.vizit.lesson = window.vizit.lesson || {};
      var outputHandler;
      var step;
      var theElement;
-     var tmp;
      var value;
 
      theElement = element;
@@ -173,4 +168,4 @@ window.vizit.lesson = window.vizit.lesson || {};
    // Common registry to ensure unique Id's on a page.
    ns.RangedSource.prototype = ns.utility.idRegistry;
 
- })(window.vizit.lesson);
+ }(window.vizit.lesson));

@@ -43,19 +43,14 @@ window.vizit.lesson = window.vizit.lesson || {};
 
      this.handleEvent   = function(event)
      {
-       var detail;
-       var i, nvalues;
-       var value;
+       const detail = event.detail;
+       const value  = detail.value;
 
-       detail = event.detail;
-       value  = detail.value;
-
-       for (i=0, nvalues=values.length; i<nvalues; ++i)
-       {
-	 if (values[i] > value)
-	 {
-	   break;
-	 }
+       const nvalues = values.length;
+       for (let i = 0; i < nvalues; ++i) {
+         if (values[i] > value) {
+           break;
+         }
        }
        MathJax.Hub.Queue(["Text", expression, expressions[i]])
      }
@@ -71,17 +66,13 @@ window.vizit.lesson = window.vizit.lesson || {};
      values               = new Array();
      xName                = xName_;
 
-     for (var i=0, nargs=expressionsAndValues.length; i<nargs; i++)
-     {
-       if (i%2 == 0)
-       {
-	 expressions.push(expressionsAndValues[i]);
-       }
-       else
-       {
-	 values.push(expressionsAndValues[i]);
+     for (let i = 0, nargs = expressionsAndValues.length; i < nargs; i++) {
+       if (i % 2 === 0) {
+         expressions.push(expressionsAndValues[i]);
+       } else {
+         values.push(expressionsAndValues[i]);
        }
      }
      document.addEventListener(xName + "Changed",   this.handleEvent.bind(this),    false);
    }
-})(window.vizit.lesson);
+}(window.vizit.lesson));
