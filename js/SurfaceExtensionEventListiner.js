@@ -74,4 +74,4 @@ window.vizit.lesson = window.vizit.lesson || {};
      sinPhi        = Math.sin(phi);
      cosPhi        = Math.cos(phi);
    }
- })(window.vizit.lesson);
+ }(window.vizit.lesson));

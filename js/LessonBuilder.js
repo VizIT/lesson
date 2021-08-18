@@ -1,7 +1,5 @@
-"use strict";
-
 /**
- *  Copyright 2014 Vizit Solutions
+ *  Copyright 2014-2021 Vizit Solutions
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,6 +18,8 @@
 window.vizit        = window.vizit        || {};
 window.vizit.lesson = window.vizit.lesson || {};
 
+"use strict";
+
 (function (ns)
  {
    /**
@@ -33,13 +33,12 @@ window.vizit.lesson = window.vizit.lesson || {};
       */
      this.init   = function()
      {
-       var element;
-       var elements;
-       var type;
+       let element;
+       let type;
 
        // TODO search for lessonElement class, then dispatch on data-type attribute.
        // this would then be class="lessonElement" data-type="rangedSource"
-       elements = document.getElementsByClassName("lessonElement");
+       const elements = document.getElementsByClassName("lessonElement");
 
        for(var i=elements.length; i--;)
        {
@@ -82,4 +81,4 @@ window.vizit.lesson = window.vizit.lesson || {};
    lessonBuilder = new ns.LessonBuilder();
    lessonBuilder.initWhenReady();
 
- })(window.vizit.lesson);
+ }(window.vizit.lesson));

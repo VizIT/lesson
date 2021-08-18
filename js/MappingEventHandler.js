@@ -53,4 +53,4 @@ window.vizit.lesson = window.vizit.lesson || {};
      framework = framework_l
      updater   = updater_;
    }
- })(window.vizit.lesson);
+ }(window.vizit.lesson));

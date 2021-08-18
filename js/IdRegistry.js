@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  *  Copyright 2014 Vizit Solutions
  *
@@ -15,6 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+
+"use strict";
 
 window.vizit                = window.vizit                || {};
 window.vizit.lesson         = window.vizit.lesson         || {};

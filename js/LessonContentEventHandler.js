@@ -43,29 +43,23 @@ window.vizit.lesson = window.vizit.lesson || {};
        var detail;
        var element;
        var elements;
-       var nelements;
        var value;
 
        detail   = event.detail;
        elements = document.getElementsByClassName(className);
 
-       for (var i=0, nelements=elements.length; i<nelements; ++i)
-       {
-	 element = elements[i];
-	 // Don't propagate data changed events back to the original source.
-	 if (detail.source != element.id)
-	 {
-	   value = detail.value;
-	   if (value < 10)
-	   {
-	     element.innerHTML = "&nbsp;" + value.toFixed(2);
-	   }
-	   else
-	   {
-	     element.innerHTML = value.toFixed(2);
-	   }
-	 }
-       }
+         for (var i = 0, nelements = elements.length; i < nelements; ++i) {
+             element = elements[i];
+             // Don't propagate data changed events back to the original source.
+             if (detail.source != element.id) {
+                 value = detail.value;
+                 if (value < 10) {
+                     element.innerHTML = "&#160;" + value.toFixed(2);
+                 } else {
+                     element.innerHTML = value.toFixed(2);
+                 }
+             }
+         }
      }
 
      eventType = eventType_;
@@ -98,29 +92,23 @@ window.vizit.lesson = window.vizit.lesson || {};
        var detail;
        var element;
        var elements;
-       var nelements;
        var value;
 
        detail   = event.detail;
        elements = document.getElementsByClassName(className);
 
-       for (var i=0, nelements=elements.length; i<nelements; ++i)
-       {
-	 element = elements[i];
-	 // Don't propagate data changed events back to the original source.
-	 if (detail.source != element.id)
-	 {
-	   value = expression(detail.value);
-	   if (value < 10)
-	   {
-	     element.innerHTML = "&nbsp;" + value.toFixed(2);
-	   }
-	   else
-	   {
-	     element.innerHTML = value.toFixed(2);
-	   }
-	 }
-       }
+         for (var i = 0, nelements = elements.length; i < nelements; ++i) {
+             element = elements[i];
+             // Don't propagate data changed events back to the original source.
+             if (detail.source != element.id) {
+                 value = expression(detail.value);
+                 if (value < 10) {
+                     element.innerHTML = "&#160;" + value.toFixed(2);
+                 } else {
+                     element.innerHTML = value.toFixed(2);
+                 }
+             }
+         }
      }
 
      eventType  = eventType_;
@@ -128,4 +116,4 @@ window.vizit.lesson = window.vizit.lesson || {};
      expression = expression_;
      document.addEventListener(eventType,   this.handleEvent.bind(this),    false);
    }
-})(window.vizit.lesson);
+}(window.vizit.lesson));

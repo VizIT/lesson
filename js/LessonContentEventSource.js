@@ -30,7 +30,6 @@ window.vizit.lesson = window.vizit.lesson || {};
     */
    ns.LessonContentIDEventSource = function(eventType_, class_)
    {
-     var CUSTOM_EVENT;
      var className;
      var elements;
      var eventType;
@@ -39,32 +38,28 @@ window.vizit.lesson = window.vizit.lesson || {};
       * On the original event, capture the id of the event source, and use it
       * to construct a custom event. Here this is the original source of the event.
       */
-     this.handleEvent   = function(event)
-     {
-       var event;
+     this.handleEvent   = function(event) {
        /** Expected to be of the form varName=varValue */
-       var id;
-       /** Populated with varName, varValue */
-       var idElements;
+       const id = this.id;
 
-
-       event.preventDefault();
-
-       id    = this.id;
-
-       if (id)
-       {
-	 idElements = id.split("=");
-	 if (idElements.length >1)
-	 {
-	   event = document.createEvent(CUSTOM_EVENT);
-	   event.initCustomEvent(idElements[0] + "Changed", true, true, {"value": parseInt(idElements[1], 10), "source": id});
-	   this.dispatchEvent(event);
-	 }
+       if (id) {
+         /** Populated with varName, varValue */
+         const idElements = id.split("=");
+         if (idElements.length > 1) {
+           const newEvent = new CustomEvent(idElements[0] + "Changed", {
+             detail: {
+               value: parseInt(idElements[1], 10),
+               source: id
+             },
+             bubbles: true,
+             cancelable: true,
+             composed: false,
+           });
+           this.dispatchEvent(newEvent);
+         }
        }
+       event.preventDefault();
      }
-
-     CUSTOM_EVENT = "CustomEvent";
 
      eventType    = eventType_;
      className    = class_;
@@ -76,4 +71,4 @@ window.vizit.lesson = window.vizit.lesson || {};
        elements[i].addEventListener(eventType,   this.handleEvent,    false);
      }
    }
-})(window.vizit.lesson);
+}(window.vizit.lesson));

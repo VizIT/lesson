@@ -39,21 +39,24 @@ window.vizit.lesson = window.vizit.lesson || {};
       */
      this.handleEvent = function(event)
      {
-       var customEvent;
-       var i;
-       var nevents;
+       const nevents = vars.length;
+
+       for (let i=0; i<nevents; ++i)
+       {
+         const customEvent = new CustomEvent(vars[i] + "Changed", {
+           detail: {
+             value: values[i],
+             source: "setter"
+           },
+           bubbles: true,
+           cancelable: true,
+           composed: false,
+         });
+         newElement.dispatchEvent(customEvent);
+       }
 
        // No dispatch on click of a link
        event.preventDefault();
-
-       nevents = vars.length;
-
-       for (i=0; i<nevents; ++i)
-       {
-         customEvent = document.createEvent(ns.CUSTOM_EVENT);
-         customEvent.initCustomEvent(vars[i] + "Changed", true, true, {"value": values[i], "source": "setter"});
-         newElement.dispatchEvent(customEvent);
-       }
      }
 
      this.init = function(element)
@@ -125,4 +128,4 @@ window.vizit.lesson = window.vizit.lesson || {};
 
      this.init(element);
    }
-})(window.vizit.lesson);
+}(window.vizit.lesson));
